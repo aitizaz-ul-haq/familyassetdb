@@ -1,0 +1,1305 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 15 0 R] /Count 12 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 16 0 R >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 17 0 R >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 18 0 R >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 19 0 R >>
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 20 0 R >>
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 21 0 R >>
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 23 0 R >>
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 25 0 R >>
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 27 0 R >>
+endobj
+16 0 obj
+<< /Length 1741 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(FAMILY ASSET REGISTRY - TECHNICAL SPEC \(JavaScript Version\)) Tj
+T*
+() Tj
+T*
+(0. Tech Stack) Tj
+T*
+(- Next.js 14 \(App Router\)) Tj
+T*
+(- MongoDB with Mongoose) Tj
+T*
+(- JavaScript only \(no TypeScript\)) Tj
+T*
+(- Authentication using JWT stored in HTTP-only cookie) Tj
+T*
+(- Passwords hashed with bcrypt) Tj
+T*
+(- Server Components by default, Client Components only where necessary \(forms, interactive pages\)) Tj
+T*
+() Tj
+T*
+(1. Purpose of the App) Tj
+T*
+(This is a private internal dashboard for one family.) Tj
+T*
+() Tj
+T*
+(We want to track every asset:) Tj
+T*
+(- Land / plots) Tj
+T*
+(- Houses / apartments) Tj
+T*
+(- Vehicles) Tj
+T*
+(- Business shares / other valuables) Tj
+T*
+() Tj
+T*
+(For each asset we store:) Tj
+T*
+(- What it is \(title, type, description\)) Tj
+T*
+(- Where it is \(location\)) Tj
+T*
+(- Who owns how much \(owners, with %\)) Tj
+T*
+(- Legal status \(clean or in dispute\)) Tj
+T*
+(- How and when it was acquired) Tj
+T*
+(- Attached supporting documents \(scan URLs\)) Tj
+T*
+(- History timeline of actions \(tax paid, mutation done, etc.\)) Tj
+T*
+() Tj
+T*
+(We also track all "people" in the family and link assets to them.) Tj
+T*
+() Tj
+T*
+(There are only two user roles:) Tj
+T*
+(- admin: can add/edit/delete) Tj
+T*
+(- viewer: read-only) Tj
+T*
+() Tj
+T*
+(2. Pages / Routes) Tj
+T*
+() Tj
+T*
+(/login) Tj
+T*
+(- Public) Tj
+T*
+(- Login form with email and password) Tj
+T*
+(- Calls POST /api/auth/login) Tj
+T*
+(- On success -> redirect to /dashboard) Tj
+T*
+() Tj
+T*
+(/dashboard) Tj
+T*
+(- Protected \(auth required\)) Tj
+T*
+(- Shows summary cards:) Tj
+T*
+(  - Total assets) Tj
+T*
+(  - Assets in dispute) Tj
+T*
+(  - Total people) Tj
+T*
+(- Shows "recent assets" list \(last 5 added\)) Tj
+T*
+() Tj
+ET
+endstream
+endobj
+17 0 obj
+<< /Length 1510 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(/assets) Tj
+T*
+(- Protected) Tj
+T*
+(- Table of all assets:) Tj
+T*
+(  - Title) Tj
+T*
+(  - Type) Tj
+T*
+(  - City / Area) Tj
+T*
+(  - Status) Tj
+T*
+(  - Owners \(names + %\)) Tj
+T*
+(- If current user is admin, show "Add Asset" button \(form\)) Tj
+T*
+() Tj
+T*
+(/assets/[id]) Tj
+T*
+(- Protected) Tj
+T*
+(- Full detail of one asset:) Tj
+T*
+(  - Basic info) Tj
+T*
+(  - Location) Tj
+T*
+(  - Ownership breakdown) Tj
+T*
+(  - Acquisition info) Tj
+T*
+(  - Dispute info) Tj
+T*
+(  - History timeline) Tj
+T*
+(  - Attached documents) Tj
+T*
+(- If role is admin, show "Edit" button placeholder) Tj
+T*
+() Tj
+T*
+(/people) Tj
+T*
+(- Protected) Tj
+T*
+(- Table of all people:) Tj
+T*
+(  - Full name) Tj
+T*
+(  - Relation to family) Tj
+T*
+(  - CNIC \(optional\)) Tj
+T*
+(  - Status \(alive / deceased\)) Tj
+T*
+(- If role is admin, show "Add Person" form button) Tj
+T*
+() Tj
+T*
+(3. Auth / Security) Tj
+T*
+() Tj
+T*
+(Roles) Tj
+T*
+(- admin) Tj
+T*
+(- viewer) Tj
+T*
+() Tj
+T*
+(Session) Tj
+T*
+(- On successful login:) Tj
+T*
+(  - Create a JWT with {_id, role, email}) Tj
+T*
+(  - Sign it with process.env.JWT_SECRET) Tj
+T*
+(  - Store it in an HTTP-only cookie, name: family_assets_session) Tj
+T*
+(  - Cookie: sameSite=strict, secure in production, maxAge 7 days) Tj
+T*
+() Tj
+T*
+(Current User) Tj
+T*
+(- getCurrentUser\(\) helper:) Tj
+T*
+(  - Reads and verifies the cookie) Tj
+T*
+(  - Looks up user in DB) Tj
+T*
+(  - Returns {_id, fullName, email, role} or null) Tj
+T*
+(  - Used by server components and API routes) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Length 1373 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+() Tj
+T*
+(Route Protection) Tj
+T*
+(- middleware.js:) Tj
+T*
+(  - Allow public: /login, /api/auth/login, and Next.js static assets) Tj
+T*
+(  - Block everything else if no valid session cookie) Tj
+T*
+(  - If blocked, redirect to /login) Tj
+T*
+(- Server components and API routes must still call getCurrentUser\(\) to validate and enforce role.) Tj
+T*
+() Tj
+T*
+(4. Environment Variables \(.env.local\)) Tj
+T*
+() Tj
+T*
+(MONGODB_URI="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/family_assets_db") Tj
+T*
+(JWT_SECRET="<long random string at least 64 chars>") Tj
+T*
+(NODE_ENV="development") Tj
+T*
+() Tj
+T*
+(- MONGODB_URI: Atlas or local) Tj
+T*
+(- JWT_SECRET: long random string) Tj
+T*
+(- NODE_ENV: standard) Tj
+T*
+() Tj
+T*
+(5. Directory / File Structure) Tj
+T*
+() Tj
+T*
+(project-root/) Tj
+T*
+(  .env.local) Tj
+T*
+(  next.config.js) Tj
+T*
+(  package.json) Tj
+T*
+(  middleware.js) Tj
+T*
+() Tj
+T*
+(  lib/) Tj
+T*
+(    db.js) Tj
+T*
+(    auth.js) Tj
+T*
+() Tj
+T*
+(  models/) Tj
+T*
+(    User.js) Tj
+T*
+(    Person.js) Tj
+T*
+(    Asset.js) Tj
+T*
+() Tj
+T*
+(  app/) Tj
+T*
+(    globals.css) Tj
+T*
+(    layout.js) Tj
+T*
+() Tj
+T*
+(    login/) Tj
+T*
+(      page.js) Tj
+T*
+(      LoginForm.js) Tj
+T*
+() Tj
+T*
+(    dashboard/) Tj
+T*
+(      page.js) Tj
+T*
+() Tj
+T*
+(    assets/) Tj
+T*
+(      page.js) Tj
+T*
+(      AddAssetForm.js) Tj
+T*
+(      [id]/) Tj
+ET
+endstream
+endobj
+19 0 obj
+<< /Length 1486 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(        page.js) Tj
+T*
+() Tj
+T*
+(    people/) Tj
+T*
+(      page.js) Tj
+T*
+(      AddPersonForm.js) Tj
+T*
+() Tj
+T*
+(    api/) Tj
+T*
+(      auth/) Tj
+T*
+(        login/route.js) Tj
+T*
+(      assets/) Tj
+T*
+(        route.js) Tj
+T*
+(      assets/[id]/) Tj
+T*
+(        route.js) Tj
+T*
+(      people/) Tj
+T*
+(        route.js) Tj
+T*
+() Tj
+T*
+(6. MongoDB Connection Helper \(lib/db.js\)) Tj
+T*
+() Tj
+T*
+(- Use mongoose) Tj
+T*
+(- Use a cached global connection to avoid multiple connections in dev) Tj
+T*
+(- Export connectDB\(\)) Tj
+T*
+(- Throw helpful error if MONGODB_URI is missing) Tj
+T*
+() Tj
+T*
+(Example pseudocode:) Tj
+T*
+() Tj
+T*
+(import mongoose from "mongoose";) Tj
+T*
+() Tj
+T*
+(let cached = global._mongooseConn;) Tj
+T*
+(if \(!cached\) {) Tj
+T*
+(  cached = global._mongooseConn = { conn: null, promise: null };) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(export async function connectDB\(\) {) Tj
+T*
+(  if \(cached.conn\) return cached.conn;) Tj
+T*
+(  if \(!cached.promise\) {) Tj
+T*
+(    if \(!process.env.MONGODB_URI\) {) Tj
+T*
+(      throw new Error\("MONGODB_URI not set in .env.local"\);) Tj
+T*
+(    }) Tj
+T*
+(    cached.promise = mongoose) Tj
+T*
+(      .connect\(process.env.MONGODB_URI, { dbName: "family_assets_db" }\)) Tj
+T*
+(      .then\(\(m\) => m\);) Tj
+T*
+(  }) Tj
+T*
+(  cached.conn = await cached.promise;) Tj
+T*
+(  return cached.conn;) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(7. Mongoose Models) Tj
+T*
+() Tj
+T*
+(7.1 models/User.js) Tj
+T*
+(Users who can log in.) Tj
+ET
+endstream
+endobj
+20 0 obj
+<< /Length 1502 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+() Tj
+T*
+(Fields:) Tj
+T*
+(- fullName: String, required) Tj
+T*
+(- email: String, required, unique, lowercase) Tj
+T*
+(- passwordHash: String, required \(bcrypt hash\)) Tj
+T*
+(- role: "admin" | "viewer" \(default "viewer"\)) Tj
+T*
+(- timestamps: true) Tj
+T*
+() Tj
+T*
+(7.2 models/Person.js) Tj
+T*
+(Represents a person that may hold ownership.) Tj
+T*
+() Tj
+T*
+(Fields:) Tj
+T*
+(- fullName: String, required) Tj
+T*
+(- fatherName: String \(optional\)) Tj
+T*
+(- cnic: String \(optional\)) Tj
+T*
+(- relationToFamily: String, example "father", "sister", "uncle") Tj
+T*
+(- status: "alive" | "deceased", default "alive") Tj
+T*
+(- notes: String \(optional\)) Tj
+T*
+(- timestamps: true) Tj
+T*
+() Tj
+T*
+(7.3 models/Asset.js) Tj
+T*
+(Main asset model. Includes embedded subdocuments.) Tj
+T*
+() Tj
+T*
+(Top-level fields:) Tj
+T*
+() Tj
+T*
+(assetType:) Tj
+T*
+(- "land_plot") Tj
+T*
+(- "house") Tj
+T*
+(- "apartment") Tj
+T*
+(- "vehicle") Tj
+T*
+(- "business_share") Tj
+T*
+(- "other") Tj
+T*
+() Tj
+T*
+(title: String, required) Tj
+T*
+(  Example: "I-8 Plot 432", "White Corolla 2020") Tj
+T*
+() Tj
+T*
+(description: String \(optional\)) Tj
+T*
+() Tj
+T*
+(location: {) Tj
+T*
+(  country: String) Tj
+T*
+(  city: String) Tj
+T*
+(  areaOrSector: String     // e.g. "I-8/3", "DHA Phase 4", "Village Dhudial") Tj
+T*
+(  addressDetails: String   // plot number, khasra number etc.) Tj
+T*
+(  geoCoordinates: {) Tj
+T*
+(    lat: Number) Tj
+T*
+(    lng: Number) Tj
+T*
+(  }) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(currentStatus:) Tj
+ET
+endstream
+endobj
+21 0 obj
+<< /Length 1434 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(- "clean") Tj
+T*
+(- "in_dispute") Tj
+T*
+(- "under_transfer") Tj
+T*
+(- "sold_but_not_cleared") Tj
+T*
+(- "unknown") Tj
+T*
+(default "clean") Tj
+T*
+() Tj
+T*
+(owners: Array of:) Tj
+T*
+({) Tj
+T*
+(  personId: ObjectId -> Person \(required\)) Tj
+T*
+(  percentage: Number \(e.g. 50, 100\) required) Tj
+T*
+(  ownershipType: String \("legal owner", "inherited", "benami", etc.\)) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(acquisitionInfo: {) Tj
+T*
+(  acquiredDate: Date) Tj
+T*
+(  acquiredFrom: String) Tj
+T*
+(  method:) Tj
+T*
+(    "purchased") Tj
+T*
+(    "gifted") Tj
+T*
+(    "inherited") Tj
+T*
+(    "transferred") Tj
+T*
+(    "settlement") Tj
+T*
+(    "other") Tj
+T*
+(  priceOrValueAtAcquisition: Number) Tj
+T*
+(  notes: String) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(disputeInfo: {) Tj
+T*
+(  isInDispute: Boolean, default false) Tj
+T*
+(  type: String // "family dispute", "court case") Tj
+T*
+(  startedDate: Date) Tj
+T*
+(  details: String) Tj
+T*
+(  lawyerName: String) Tj
+T*
+(  caseNumber: String) Tj
+T*
+(  nextHearingDate: Date) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(documents: Array of:) Tj
+T*
+({) Tj
+T*
+(  label: String, required // "Registry Deed") Tj
+T*
+(  fileUrl: String, required // link to file in private storage) Tj
+T*
+(  notes: String) Tj
+T*
+(  uploadedAt: Date \(default now\)) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(history: Array of:) Tj
+T*
+({) Tj
+T*
+(  date: Date \(default now\)) Tj
+T*
+(  action: String, required // "Acquired", "Mutation done") Tj
+ET
+endstream
+endobj
+22 0 obj
+<< /Length 1442 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(  details: String) Tj
+T*
+(}) Tj
+T*
+() Tj
+T*
+(tags: [String] // e.g. ["ancestral", "rental", "village"]) Tj
+T*
+() Tj
+T*
+(timestamps: true) Tj
+T*
+() Tj
+T*
+(8. Auth Helpers \(lib/auth.js\)) Tj
+T*
+() Tj
+T*
+(Responsibilities:) Tj
+T*
+(- Sign and verify JWT) Tj
+T*
+(- Set / clear cookie) Tj
+T*
+(- Return current user) Tj
+T*
+() Tj
+T*
+(Important details:) Tj
+T*
+(- Cookie name: family_assets_session) Tj
+T*
+(- Cookie httpOnly, sameSite strict, secure in production, maxAge 7 days) Tj
+T*
+() Tj
+T*
+(Functions:) Tj
+T*
+() Tj
+T*
+(signJWT\(payload\)) Tj
+T*
+(- uses process.env.JWT_SECRET) Tj
+T*
+(- expiresIn "7d") Tj
+T*
+() Tj
+T*
+(verifyJWT\(token\)) Tj
+T*
+(- uses process.env.JWT_SECRET) Tj
+T*
+() Tj
+T*
+(createSession\(userId, role, email\)) Tj
+T*
+(- sign JWT with {_id, role, email}) Tj
+T*
+(- set cookie family_assets_session with httpOnly etc.) Tj
+T*
+() Tj
+T*
+(destroySession\(\)) Tj
+T*
+(- clear cookie) Tj
+T*
+() Tj
+T*
+(getCurrentUser\(\)) Tj
+T*
+(- read cookie from next/headers cookies\(\)) Tj
+T*
+(- verify JWT) Tj
+T*
+(- fetch user from DB) Tj
+T*
+(- return {_id, fullName, email, role}) Tj
+T*
+(- return null if invalid) Tj
+T*
+() Tj
+T*
+(9. middleware.js) Tj
+T*
+() Tj
+T*
+(Behavior:) Tj
+T*
+(- Protect everything except:) Tj
+T*
+(  - /login) Tj
+T*
+(  - /api/auth/login) Tj
+T*
+(  - static assets like /_next and favicon) Tj
+T*
+(- If user is not logged in \(no cookie family_assets_session\):) Tj
+T*
+(  - redirect to /login) Tj
+ET
+endstream
+endobj
+23 0 obj
+<< /Length 1519 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+() Tj
+T*
+(Server components and API routes must still call getCurrentUser\(\) to do final) Tj
+T*
+(role checks and to enforce admin-only actions.) Tj
+T*
+() Tj
+T*
+(10. API Route Handlers \(App Router, route.js files\)) Tj
+T*
+() Tj
+T*
+(All handlers live in app/api/.../route.js.) Tj
+T*
+(Use Next.js Request and Response.) Tj
+T*
+() Tj
+T*
+(10.1 POST /api/auth/login) Tj
+T*
+(- Body: { email, password }) Tj
+T*
+(Steps:) Tj
+T*
+(1. connectDB\(\)) Tj
+T*
+(2. find user by email) Tj
+T*
+(3. compare provided password with user.passwordHash using bcrypt.compare) Tj
+T*
+(4. if match:) Tj
+T*
+(   - createSession\(user._id, user.role, user.email\)) Tj
+T*
+(   - return JSON with _id, fullName, role, email) Tj
+T*
+(5. else return 401) Tj
+T*
+() Tj
+T*
+(10.2 GET /api/people) Tj
+T*
+(- Must be authenticated) Tj
+T*
+(- Returns list of all people:) Tj
+T*
+(  {) Tj
+T*
+(    _id,) Tj
+T*
+(    fullName,) Tj
+T*
+(    relationToFamily,) Tj
+T*
+(    status,) Tj
+T*
+(    cnic) Tj
+T*
+(  }) Tj
+T*
+(- Sort by fullName ascending) Tj
+T*
+() Tj
+T*
+(10.3 POST /api/people) Tj
+T*
+(- Must be authenticated) Tj
+T*
+(- Must be role admin) Tj
+T*
+(- Body:) Tj
+T*
+(  {) Tj
+T*
+(    fullName \(required\),) Tj
+T*
+(    fatherName?,) Tj
+T*
+(    cnic?,) Tj
+T*
+(    relationToFamily?,) Tj
+T*
+(    status? \("alive" or "deceased"\),) Tj
+T*
+(    notes?) Tj
+T*
+(  }) Tj
+T*
+(- Creates a Person document and returns { _id }) Tj
+T*
+() Tj
+T*
+(10.4 GET /api/assets) Tj
+T*
+(- Must be authenticated) Tj
+T*
+(- Returns list for table view:) Tj
+T*
+(  {) Tj
+ET
+endstream
+endobj
+24 0 obj
+<< /Length 1511 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(    _id,) Tj
+T*
+(    title,) Tj
+T*
+(    assetType,) Tj
+T*
+(    currentStatus,) Tj
+T*
+(    location: { city, areaOrSector },) Tj
+T*
+(    owners: [) Tj
+T*
+(      { personName, percentage }) Tj
+T*
+(    ]) Tj
+T*
+(  }) Tj
+T*
+(- Should populate owners.personId to get personName) Tj
+T*
+() Tj
+T*
+(10.5 POST /api/assets) Tj
+T*
+(- Must be authenticated) Tj
+T*
+(- Must be role admin) Tj
+T*
+(- Creates an Asset) Tj
+T*
+(- Request body can include:) Tj
+T*
+(  assetType,) Tj
+T*
+(  title,) Tj
+T*
+(  description,) Tj
+T*
+(  location { country, city, areaOrSector, addressDetails },) Tj
+T*
+(  currentStatus,) Tj
+T*
+(  owners [ { personId, percentage, ownershipType } ],) Tj
+T*
+(  acquisitionInfo { acquiredDate, acquiredFrom, method, priceOrValueAtAcquisition, notes },) Tj
+T*
+(  disputeInfo { isInDispute, type, startedDate, details, lawyerName, caseNumber, nextHearingDate },) Tj
+T*
+(  tags [ ... ]) Tj
+T*
+(- Returns { _id }) Tj
+T*
+() Tj
+T*
+(10.6 GET /api/assets/[id]) Tj
+T*
+(- Must be authenticated) Tj
+T*
+(- Returns full expanded asset document:) Tj
+T*
+(  {) Tj
+T*
+(    _id,) Tj
+T*
+(    assetType,) Tj
+T*
+(    title,) Tj
+T*
+(    description,) Tj
+T*
+(    location,) Tj
+T*
+(    currentStatus,) Tj
+T*
+(    owners: [) Tj
+T*
+(      {) Tj
+T*
+(        personId,) Tj
+T*
+(        personName,) Tj
+T*
+(        percentage,) Tj
+T*
+(        ownershipType) Tj
+T*
+(      }) Tj
+T*
+(    ],) Tj
+T*
+(    acquisitionInfo,) Tj
+T*
+(    disputeInfo,) Tj
+T*
+(    documents,) Tj
+T*
+(    history,) Tj
+T*
+(    tags,) Tj
+ET
+endstream
+endobj
+25 0 obj
+<< /Length 1703 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(    createdAt,) Tj
+T*
+(    updatedAt) Tj
+T*
+(  }) Tj
+T*
+(- Populate owners.personId to get personName) Tj
+T*
+() Tj
+T*
+(11. Frontend Components / Pages) Tj
+T*
+() Tj
+T*
+(app/layout.js) Tj
+T*
+(- Global layout with <html> and <body>) Tj
+T*
+(- Can include a top nav or sidebar if user is logged in) Tj
+T*
+(- Nav links: Dashboard, Assets, People) Tj
+T*
+() Tj
+T*
+(app/login/page.js) Tj
+T*
+(- Client component) Tj
+T*
+(- Renders a login form) Tj
+T*
+(- On submit:) Tj
+T*
+(  - fetch\("/api/auth/login", { method: "POST", body: JSON.stringify\({email, password}\) }\)) Tj
+T*
+(  - If status 200 -> window.location.href = "/dashboard") Tj
+T*
+(  - Else show error message) Tj
+T*
+() Tj
+T*
+(app/dashboard/page.js) Tj
+T*
+(- Server component) Tj
+T*
+(- Calls getCurrentUser\(\)) Tj
+T*
+(- Queries DB:) Tj
+T*
+(  - total assets count) Tj
+T*
+(  - total people count) Tj
+T*
+(  - assets in dispute count \(disputeInfo.isInDispute === true\)) Tj
+T*
+(- Renders stat cards) Tj
+T*
+(- Shows last ~5 assets \(title, status\)) Tj
+T*
+() Tj
+T*
+(app/assets/page.js) Tj
+T*
+(- Server component) Tj
+T*
+(- Calls getCurrentUser\(\)) Tj
+T*
+(- Fetches /api/assets or reads DB directly) Tj
+T*
+(- Renders table with columns:) Tj
+T*
+(  Title | Type | Location | Status | Owners) Tj
+T*
+(- If currentUser.role === "admin":) Tj
+T*
+(  - Render <AddAssetForm /> \(client component\)) Tj
+T*
+() Tj
+T*
+(AddAssetForm.js) Tj
+T*
+(- Client component) Tj
+T*
+(- Form fields:) Tj
+T*
+(  - title) Tj
+T*
+(  - assetType) Tj
+T*
+(  - city) Tj
+T*
+(  - areaOrSector) Tj
+T*
+(  - status) Tj
+T*
+(  - owners array \(basic for MVP: manual personId + percentage\)) Tj
+T*
+(- On submit do POST /api/assets) Tj
+T*
+(- After success, reload page) Tj
+ET
+endstream
+endobj
+26 0 obj
+<< /Length 1554 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+() Tj
+T*
+(app/assets/[id]/page.js) Tj
+T*
+(- Server component) Tj
+T*
+(- Fetch /api/assets/[id]) Tj
+T*
+(- Render sections:) Tj
+T*
+(  - Basic info \(title, description, type, status\)) Tj
+T*
+(  - Location block) Tj
+T*
+(  - Ownership table \(Name | % | ownershipType\)) Tj
+T*
+(  - Acquisition info) Tj
+T*
+(  - Dispute info) Tj
+T*
+(  - Documents list \(label + fileUrl\)) Tj
+T*
+(  - History timeline \(date, action, details\)) Tj
+T*
+() Tj
+T*
+(app/people/page.js) Tj
+T*
+(- Server component) Tj
+T*
+(- Fetch /api/people) Tj
+T*
+(- Render table:) Tj
+T*
+(  Full Name | Relation | CNIC | Status) Tj
+T*
+(- If currentUser.role === "admin":) Tj
+T*
+(  - Render <AddPersonForm />) Tj
+T*
+() Tj
+T*
+(AddPersonForm.js) Tj
+T*
+(- Client component) Tj
+T*
+(- Form fields:) Tj
+T*
+(  - fullName) Tj
+T*
+(  - fatherName) Tj
+T*
+(  - cnic) Tj
+T*
+(  - relationToFamily) Tj
+T*
+(  - status \(alive/deceased\)) Tj
+T*
+(  - notes) Tj
+T*
+(- On submit:) Tj
+T*
+(  - POST /api/people) Tj
+T*
+(  - Reload page) Tj
+T*
+() Tj
+T*
+(12. Seeding Initial Admin User \(manual script\)) Tj
+T*
+(We will NOT build signup UI.) Tj
+T*
+() Tj
+T*
+(Create a one-time Node script \(not in production runtime\) e.g. scripts/createAdmin.js:) Tj
+T*
+(- connect to DB) Tj
+T*
+(- hash a password using bcrypt.hash\(password, saltRounds\)) Tj
+T*
+(- insert:) Tj
+T*
+(  {) Tj
+T*
+(    fullName: "Your Name",) Tj
+T*
+(    email: "your@email.com",) Tj
+T*
+(    passwordHash: "<hashed>",) Tj
+T*
+(    role: "admin") Tj
+T*
+(  }) Tj
+T*
+() Tj
+T*
+(After seeding, delete or keep script private.) Tj
+T*
+() Tj
+ET
+endstream
+endobj
+27 0 obj
+<< /Length 447 >>
+stream
+BT
+/F1 10 Tf
+12 TL
+50 750 Td
+(13. Future Ideas \(Not required MVP\)) Tj
+T*
+(- File uploads for "documents" using S3 or Google Drive or local private folder) Tj
+T*
+(- Reminder system for hearings, tax renewals, token renewals, etc.) Tj
+T*
+(- Edit and delete functionality for assets and people) Tj
+T*
+(- Audit log of changes \(who edited what and when\)) Tj
+T*
+(- Export to PDF for inheritance/legal discussions) Tj
+T*
+() Tj
+T*
+(END OF SPEC) Tj
+ET
+endstream
+endobj
+xref
+0 28
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000188 00000 n 
+0000000258 00000 n 
+0000000385 00000 n 
+0000000512 00000 n 
+0000000639 00000 n 
+0000000766 00000 n 
+0000000893 00000 n 
+0000001020 00000 n 
+0000001148 00000 n 
+0000001276 00000 n 
+0000001404 00000 n 
+0000001532 00000 n 
+0000001660 00000 n 
+0000001788 00000 n 
+0000003581 00000 n 
+0000005143 00000 n 
+0000006568 00000 n 
+0000008106 00000 n 
+0000009660 00000 n 
+0000011146 00000 n 
+0000012640 00000 n 
+0000014211 00000 n 
+0000015774 00000 n 
+0000017529 00000 n 
+0000019135 00000 n 
+trailer
+<< /Size 28 /Root 1 0 R >>
+startxref
+19633
+%%EOF

@@ -1,0 +1,6 @@
+Ahcp7aXF7q5iuOyv
+
+atzsoftprgmr_db_user
+
+
+mongodb+srv://atzsoftprgmr_db_user:Ahcp7aXF7q5iuOyv@cluster0.aczntpg.mongodb.net/?appName=Cluster0
