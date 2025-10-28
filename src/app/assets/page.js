@@ -4,6 +4,7 @@ import Asset from "../../../models/Asset";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import AddAssetForm from "./AddAssetForm";
+import DashboardLayout from "../components/DashboardLayout";
 
 export default async function AssetsPage() {
   const user = await getCurrentUser();
@@ -19,7 +20,7 @@ export default async function AssetsPage() {
     .sort({ createdAt: -1 });
 
   return (
-    <div>
+    <DashboardLayout userName={user.fullName}>
       <h1 style={{ marginBottom: "2rem" }}>Assets</h1>
 
       {user.role === "admin" && <AddAssetForm />}
@@ -68,6 +69,6 @@ export default async function AssetsPage() {
           </table>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

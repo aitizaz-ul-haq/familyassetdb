@@ -4,3 +4,14 @@ atzsoftprgmr_db_user
 
 
 mongodb+srv://atzsoftprgmr_db_user:Ahcp7aXF7q5iuOyv@cluster0.aczntpg.mongodb.net/?appName=Cluster0
+
+Login Credentials:
+==================
+Super Admin:
+  Username: saadi
+  Password: saadi123
+
+Viewers:
+  Username: moon | Password: moon123
+  Username: papa | Password: papa123
+  Username: samina | Password: samina123 (deceased)

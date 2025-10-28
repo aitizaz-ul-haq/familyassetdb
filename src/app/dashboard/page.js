@@ -4,6 +4,7 @@ import Asset from "../../../models/Asset";
 import Person from "../../../models/Person";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import DashboardLayout from "../components/DashboardLayout";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -19,10 +20,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div>
-      <h1 style={{ marginBottom: "1rem" }}>Dashboard</h1>
-      <p style={{ color: "#666", marginBottom: "1.5rem" }}>Welcome back, {user.fullName}.</p>
-
+    <DashboardLayout userName={user.fullName}>
       <div className="grid-cards" style={{ marginBottom: "2rem" }}>
         <div className="card">
           <h3>Total Assets</h3>
@@ -43,10 +41,10 @@ export default async function DashboardPage() {
           <h2 style={{ margin: 0 }}>Recent Assets</h2>
           <Link href="/assets">View all</Link>
         </div>
-        <div className="table-responsive">
-          {recentAssets.length === 0 ? (
-            <p>No assets yet. <Link href="/assets">Add your first asset</Link></p>
-          ) : (
+        {recentAssets.length === 0 ? (
+          <p>No assets yet. <Link href="/assets">Add your first asset</Link></p>
+        ) : (
+          <div className="table-responsive">
             <table className="table-sm table-nowrap">
               <thead>
                 <tr>
@@ -67,9 +65,9 @@ export default async function DashboardPage() {
                 ))}
               </tbody>
             </table>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

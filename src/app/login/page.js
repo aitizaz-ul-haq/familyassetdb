@@ -7,6 +7,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotUsername, setForgotUsername] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +30,37 @@ export default function LoginPage() {
       }
     } catch {
       setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setForgotMessage("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: forgotUsername }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setForgotMessage("Password reset request sent to administrator. You will be contacted shortly.");
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setForgotUsername("");
+          setForgotMessage("");
+        }, 3000);
+      } else {
+        setForgotMessage(data.error || "Failed to send request");
+      }
+    } catch {
+      setForgotMessage("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -67,8 +101,75 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <a href="#" className="link-black">Forgot password?</a>
+        <a 
+          href="#" 
+          className="link-black"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowForgotPassword(true);
+          }}
+        >
+          Forgot password?
+        </a>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.5)",
+          display: "grid",
+          placeItems: "center",
+          zIndex: 1000,
+        }}>
+          <div className="card" style={{ maxWidth: 400, width: "90%", background: "white" }}>
+            <h2>Forgot Password</h2>
+            <p style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "#666" }}>
+              Enter your username. The administrator will be notified to reset your password.
+            </p>
+            <form onSubmit={handleForgotPassword}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  value={forgotUsername}
+                  onChange={(e) => setForgotUsername(e.target.value)}
+                  required
+                  placeholder="Username"
+                />
+              </div>
+              {forgotMessage && (
+                <div style={{ 
+                  color: forgotMessage.includes("sent") ? "#2e7d32" : "#c62828", 
+                  marginBottom: "0.75rem",
+                  fontSize: "0.9rem"
+                }}>
+                  {forgotMessage}
+                </div>
+              )}
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button type="submit" disabled={loading}>
+                  {loading ? "Sending..." : "Send Request"}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setForgotUsername("");
+                    setForgotMessage("");
+                  }}
+                  style={{ background: "#999" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

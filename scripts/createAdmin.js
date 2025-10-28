@@ -1,5 +1,5 @@
-// Run this once to create your first admin user
-// Usage: node scripts/createAdmin.js
+// This script is kept for reference. Use seedUsers.js instead to create all three users.
+// Run: npm run seed-users
 
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
@@ -44,6 +44,7 @@ async function createAdmin() {
     const existingUser = await User.findOne({ email: adminData.email });
     if (existingUser) {
       console.log("Admin user already exists!");
+      console.log("\n⚠️  NOTE: Use 'npm run seed-users' to create all three users (saadi, moon, papa)");
       process.exit(0);
     }
 

@@ -21,6 +21,17 @@ const UserSchema = new mongoose.Schema(
       enum: ["admin", "viewer"],
       default: "viewer",
     },
+    relationToFamily: {
+      type: String,
+    },
+    cnic: {
+      type: String,
+    },
+    status: {
+      type: String,
+      enum: ["alive", "deceased"],
+      default: "alive",
+    },
   },
   {
     timestamps: true,

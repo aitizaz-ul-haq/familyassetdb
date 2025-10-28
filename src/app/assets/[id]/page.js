@@ -3,6 +3,7 @@ import { connectDB } from "../../../../lib/db";
 import Asset from "../../../../models/Asset";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import DashboardLayout from "../../components/DashboardLayout";
 
 export default async function AssetDetailPage({ params }) {
   const user = await getCurrentUser();
@@ -20,7 +21,7 @@ export default async function AssetDetailPage({ params }) {
   }
 
   return (
-    <div>
+    <DashboardLayout userName={user.fullName}>
       <Link href="/assets" style={{ marginBottom: "1rem", display: "inline-block" }}>
         ← Back to Assets
       </Link>
@@ -164,6 +165,6 @@ export default async function AssetDetailPage({ params }) {
           </div>
         </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 }
