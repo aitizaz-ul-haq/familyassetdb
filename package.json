@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "seed-users": "node -r dotenv/config scripts/seedUsers.js",
-    "update-users": "node -r dotenv/config scripts/updateUsers.js"
+    "update-users": "node -r dotenv/config scripts/updateUsers.js",
+    "seed-assets": "node -r dotenv/config scripts/seedAssets.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -19,6 +20,7 @@
     "nodemailer": "^6.9.7",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-pdf": "^7.7.0"
   }
 }

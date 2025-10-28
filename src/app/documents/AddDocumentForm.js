@@ -142,8 +142,23 @@ export default function AddDocumentForm({ assets }) {
               />
             </div>
 
+            <div style={{ padding: "1rem", background: "#e3f2fd", borderRadius: "4px" }}>
+              <h4 style={{ marginBottom: "0.5rem", fontSize: "1rem" }}>📤 How to Upload Files:</h4>
+              <ol style={{ paddingLeft: "1.5rem", lineHeight: "1.8" }}>
+                <li>
+                  <strong>For Images (JPG/PNG):</strong> Upload to{" "}
+                  <a href="https://imgbb.com" target="_blank" style={{ color: "#2196F3" }}>ImgBB.com</a>{" "}
+                  (free, no account needed)
+                </li>
+                <li>
+                  <strong>For PDFs:</strong> Upload to Google Drive, set sharing to "Anyone with link can view", copy link
+                </li>
+                <li>Paste the shareable link below</li>
+              </ol>
+            </div>
+
             <div>
-              <label className="label">File URL / Link * (Upload to ImgBB, Imgur, Google Drive, etc.)</label>
+              <label className="label">File URL / Link *</label>
               <input
                 type="url"
                 value={formData.fileUrl}
@@ -151,10 +166,6 @@ export default function AddDocumentForm({ assets }) {
                 required
                 placeholder="https://i.ibb.co/... or https://drive.google.com/..."
               />
-              <small style={{ color: "#666", fontSize: "0.85rem", display: "block", marginTop: "0.25rem" }}>
-                📸 For images: Upload to <a href="https://imgbb.com" target="_blank" style={{ color: "#7FC6A4" }}>ImgBB</a> or <a href="https://imgur.com" target="_blank" style={{ color: "#7FC6A4" }}>Imgur</a><br />
-                📄 For PDFs: Upload to Google Drive and get shareable link
-              </small>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>

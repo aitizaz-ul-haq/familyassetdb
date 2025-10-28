@@ -47,3 +47,64 @@ export async function GET(request, { params }) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function PUT(request, { params }) {
+  try {
+    const user = await getCurrentUser();
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (user.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const body = await request.json();
+
+    await connectDB();
+
+    // Update with ALL fields from the body
+    const updatedAsset = await Asset.findByIdAndUpdate(
+      params.id,
+      { $set: body }, // Accept all fields
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedAsset) {
+      return NextResponse.json({ error: "Asset not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, asset: updatedAsset });
+  } catch (error) {
+    console.error("PUT /api/assets/[id] error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request, { params }) {
+  try {
+    const user = await getCurrentUser();
+    
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (user.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    await connectDB();
+
+    const deletedAsset = await Asset.findByIdAndDelete(params.id);
+
+    if (!deletedAsset) {
+      return NextResponse.json({ error: "Asset not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE /api/assets/[id] error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
