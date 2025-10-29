@@ -107,6 +107,7 @@ export default function HouseAssetForm({ onCancel }) {
     },
     notesInternal: "",
     tags: [],
+    relatedContacts: [{ category: "neighbor", name: "", phoneNumber: "", notes: "" }],
   });
   
   const [loading, setLoading] = useState(false);
@@ -152,6 +153,7 @@ export default function HouseAssetForm({ onCancel }) {
     { id: "control", label: "Control Info" },
     { id: "history", label: "History" },
     { id: "flags", label: "Flags & Notes" },
+    { id: "contacts", label: "Related Contacts" },
   ];
 
   const currentIndex = sections.findIndex(s => s.id === activeSection);
@@ -984,6 +986,88 @@ export default function HouseAssetForm({ onCancel }) {
                 rows="3"
               />
             </div>
+          </div>
+        )}
+
+        {activeSection === "contacts" && (
+          <div style={{ display: "grid", gap: "1rem" }}>
+            <h3>Related Contacts</h3>
+            {formData.relatedContacts.map((contact, idx) => (
+              <div key={idx} style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "4px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                  <div>
+                    <label className="label">Category</label>
+                    <input
+                      value={contact.category}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].category = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      placeholder="e.g., neighbor, relative"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Name</label>
+                    <input
+                      value={contact.name}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].name = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      placeholder="Full name"
+                    />
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                  <div>
+                    <label className="label">Phone Number</label>
+                    <input
+                      value={contact.phoneNumber}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].phoneNumber = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      placeholder="e.g., 0301-2345678"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="label">Notes</label>
+                  <textarea
+                    value={contact.notes}
+                    onChange={(e) => {
+                      const newContacts = [...formData.relatedContacts];
+                      newContacts[idx].notes = e.target.value;
+                      setFormData({ ...formData, relatedContacts: newContacts });
+                    }}
+                    rows="2"
+                    placeholder="Any additional information"
+                  />
+                </div>
+                {formData.relatedContacts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newContacts = formData.relatedContacts.filter((_, i) => i !== idx);
+                      setFormData({ ...formData, relatedContacts: newContacts });
+                    }}
+                    style={{ marginTop: "0.5rem", background: "#ef5350", width: "auto", padding: "0.35rem 1rem", fontSize: "0.85rem" }}
+                  >
+                    Remove Contact
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, relatedContacts: [...formData.relatedContacts, { category: "neighbor", name: "", phoneNumber: "", notes: "" }]})}
+              style={{ background: "#6AB090", width: "auto", padding: "0.5rem 1rem" }}
+            >
+              + Add Related Contact
+            </button>
           </div>
         )}
 

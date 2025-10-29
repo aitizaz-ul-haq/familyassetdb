@@ -98,6 +98,7 @@ export default function PlotAssetForm({ onCancel }) {
     },
     notesInternal: "",
     tags: [],
+    relatedContacts: [{ category: "neighbor", name: "", phoneNumber: "", notes: "" }],
   });
   
   const [loading, setLoading] = useState(false);
@@ -140,6 +141,7 @@ export default function PlotAssetForm({ onCancel }) {
     { id: "valuation", label: "Valuation" },
     { id: "compliance", label: "Compliance" },
     { id: "possession", label: "Possession" },
+    { id: "contacts", label: "Related Contacts" },
     { id: "control", label: "Control Info" },
     { id: "history", label: "History" },
     { id: "flags", label: "Flags & Notes" },
@@ -831,6 +833,107 @@ export default function PlotAssetForm({ onCancel }) {
                 <option value="no">No</option>
               </select>
             </div>
+          </div>
+        )}
+
+        {activeSection === "contacts" && (
+          <div style={{ display: "grid", gap: "1rem" }}>
+            <h3>Related Contacts</h3>
+            <p style={{ fontSize: "0.9rem", color: "#666" }}>
+              Add contacts related to this asset (neighbors, laborers, dealers, etc.)
+            </p>
+            
+            {formData.relatedContacts.map((contact, idx) => (
+              <div key={idx} style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "4px", background: "#f9f9f9" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                  <div>
+                    <label className="label">Contact Category *</label>
+                    <select
+                      value={contact.category}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].category = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      required
+                      style={{ border: "1px solid #7FC6A4" }}
+                    >
+                      <option value="neighbor">Neighbor</option>
+                      <option value="labor">Labor/Worker</option>
+                      <option value="dealer">Dealer/Agent</option>
+                      <option value="conflict_person">Conflict Person</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Name *</label>
+                    <input
+                      value={contact.name}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].name = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      required
+                      placeholder="Contact name"
+                      style={{ border: "1px solid #7FC6A4" }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem" }}>
+                  <div>
+                    <label className="label">Phone Number *</label>
+                    <input
+                      value={contact.phoneNumber}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].phoneNumber = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      required
+                      placeholder="03xx-xxxxxxx"
+                      style={{ border: "1px solid #7FC6A4" }}
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Notes (Optional)</label>
+                    <input
+                      value={contact.notes}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].notes = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      placeholder="Additional notes about this contact"
+                      style={{ border: "1px solid #7FC6A4" }}
+                    />
+                  </div>
+                </div>
+                {formData.relatedContacts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newContacts = formData.relatedContacts.filter((_, i) => i !== idx);
+                      setFormData({ ...formData, relatedContacts: newContacts });
+                    }}
+                    style={{ marginTop: "0.75rem", background: "#ef5350", width: "auto", padding: "0.35rem 1rem", fontSize: "0.85rem" }}
+                  >
+                    Remove Contact
+                  </button>
+                )}
+              </div>
+            ))}
+            
+            <button
+              type="button"
+              onClick={() => setFormData({ 
+                ...formData, 
+                relatedContacts: [...formData.relatedContacts, { category: "neighbor", name: "", phoneNumber: "", notes: "" }]
+              })}
+              style={{ background: "#6AB090", width: "auto", padding: "0.5rem 1rem" }}
+            >
+              + Add Another Contact
+            </button>
           </div>
         )}
 

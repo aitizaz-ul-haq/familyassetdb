@@ -1,50 +1,97 @@
 import { getCurrentUser } from "../../../lib/auth";
 import { connectDB } from "../../../lib/db";
-import Document from "../../../models/Document";
 import Asset from "../../../models/Asset";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import DashboardLayout from "../components/DashboardLayout";
-import AddDocumentForm from "./AddDocumentForm";
-import DocumentsList from "./DocumentsList";
+import AttachDocumentButton from "./AttachDocumentButton";
+import DocumentsTable from "./DocumentsTable";
 
-export default async function DocumentsPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function DocumentsPage({ searchParams }) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   await connectDB();
 
-  const documents = await Document.find()
-    .populate("assetId", "title")
-    .sort({ createdAt: -1 });
+  const searchQuery = searchParams?.search?.trim() || "";
 
-  const assets = await Asset.find().select("title").sort({ title: 1 });
+  console.log("=== DOCUMENTS PAGE DEBUG ===");
+  console.log("Search query:", searchQuery);
 
-  const documentsData = documents.map((doc) => ({
-    _id: doc._id.toString(),
-    label: doc.label,
-    fileUrl: doc.fileUrl,
-    docType: doc.docType,
-    fileType: doc.fileType,
-    assetTitle: doc.assetId?.title || "Unknown Asset",
-    assetId: doc.assetId?._id.toString(),
-    notes: doc.notes,
-    isCritical: doc.isCritical,
-    createdAt: doc.createdAt,
-  }));
+  // First, let's see ALL assets with documents (no filter)
+  const allAssetsWithDocs = await Asset.find({ 
+    documents: { $exists: true, $ne: [] } 
+  })
+    .select('title documents')
+    .lean();
 
-  const assetsData = assets.map((a) => ({
-    _id: a._id.toString(),
-    title: a.title,
+  console.log(`Total assets with documents in DB: ${allAssetsWithDocs.length}`);
+  if (allAssetsWithDocs.length > 0) {
+    console.log("Assets found:", allAssetsWithDocs.map(a => ({
+      title: a.title,
+      docCount: a.documents?.length || 0
+    })));
+  }
+
+  // Now apply search filter
+  let query = { documents: { $exists: true, $ne: [] } };
+  
+  if (searchQuery) {
+    query.title = { $regex: searchQuery, $options: "i" };
+    console.log("Applying search filter:", query);
+  }
+
+  const assetsWithDocs = await Asset.find(query)
+    .select('title documents')
+    .sort({ title: 1 })
+    .lean();
+
+  console.log(`Assets after filter: ${assetsWithDocs.length}`);
+  console.log("=== END DEBUG ===");
+
+  // Serialize data
+  const assetsData = assetsWithDocs.map(asset => ({
+    _id: asset._id.toString(),
+    title: asset.title,
+    documentCount: asset.documents?.length || 0,
+    documents: (asset.documents || []).map(doc => ({
+      label: doc.label,
+      fileUrl: doc.fileUrl,
+      docType: doc.docType,
+      fileType: doc.fileType,
+      uploadedAt: doc.uploadedAt,
+    }))
   }));
 
   return (
     <DashboardLayout userName={user.fullName}>
-      <h1 style={{ marginBottom: "2rem" }}>Documents</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
+        <h1 style={{ margin: 0 }}>📎 Documents</h1>
+        <AttachDocumentButton />
+      </div>
 
-      {user.role === "admin" && <AddDocumentForm assets={assetsData} />}
+      <div className="card">
+        <p style={{ marginBottom: "1.5rem", color: "#666", fontSize: "0.95rem" }}>
+          Assets with attached documents. Use the search to find specific assets by name.
+        </p>
 
-      <DocumentsList documents={documentsData} />
+        {/* DEBUG INFO */}
+        <div style={{ 
+          padding: "1rem", 
+          background: "#f0f0f0", 
+          borderRadius: "4px", 
+          marginBottom: "1rem",
+          fontSize: "0.85rem"
+        }}>
+          <strong>Debug Info:</strong><br/>
+          Total assets with documents: {allAssetsWithDocs.length}<br/>
+          Search query: {searchQuery || "(none)"}<br/>
+          Results shown: {assetsData.length}
+        </div>
+
+        <DocumentsTable assets={assetsData} initialSearch={searchQuery} />
+      </div>
     </DashboardLayout>
   );
 }

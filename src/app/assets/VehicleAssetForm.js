@@ -97,6 +97,7 @@ export default function VehicleAssetForm({ onCancel }) {
     },
     notesInternal: "",
     tags: [],
+    relatedContacts: [{ personId: "", relation: "", contact: "" }],
   });
   
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ export default function VehicleAssetForm({ onCancel }) {
     { id: "control", label: "Control Info" },
     { id: "history", label: "History" },
     { id: "flags", label: "Flags & Notes" },
+    { id: "contacts", label: "Related Contacts" },
   ];
 
   const currentIndex = sections.findIndex(s => s.id === activeSection);
@@ -903,6 +905,74 @@ export default function VehicleAssetForm({ onCancel }) {
                 rows="3"
               />
             </div>
+          </div>
+        )}
+
+        {activeSection === "contacts" && (
+          <div style={{ display: "grid", gap: "1rem" }}>
+            <h3>Related Contacts</h3>
+            <p style={{ fontSize: "0.9rem", color: "#666" }}>People related to this asset</p>
+            {formData.relatedContacts.map((contact, idx) => (
+              <div key={idx} style={{ padding: "1rem", border: "1px solid #ddd", borderRadius: "4px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                  <div>
+                    <label className="label">Name</label>
+                    <input
+                      value={contact.personId}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].personId = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Relation</label>
+                    <input
+                      value={contact.relation}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].relation = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                      placeholder="e.g., son, father"
+                    />
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem" }}>
+                  <div>
+                    <label className="label">Contact</label>
+                    <input
+                      value={contact.contact}
+                      onChange={(e) => {
+                        const newContacts = [...formData.relatedContacts];
+                        newContacts[idx].contact = e.target.value;
+                        setFormData({ ...formData, relatedContacts: newContacts });
+                      }}
+                    />
+                  </div>
+                </div>
+                {formData.relatedContacts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newContacts = formData.relatedContacts.filter((_, i) => i !== idx);
+                      setFormData({ ...formData, relatedContacts: newContacts });
+                    }}
+                    style={{ marginTop: "0.5rem", background: "#ef5350", width: "auto", padding: "0.35rem 1rem", fontSize: "0.85rem" }}
+                  >
+                    Remove Contact
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, relatedContacts: [...formData.relatedContacts, { personId: "", relation: "", contact: "" }]})}
+              style={{ background: "#6AB090", width: "auto", padding: "0.5rem 1rem" }}
+            >
+              + Add Related Contact
+            </button>
           </div>
         )}
 

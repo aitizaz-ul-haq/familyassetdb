@@ -1,9 +1,10 @@
 import { getCurrentUser } from "../../../../lib/auth";
 import { connectDB } from "../../../../lib/db";
 import Asset from "../../../../models/Asset";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import User from "../../../../models/User";
+import { redirect, notFound } from "next/navigation";
 import DashboardLayout from "../../components/DashboardLayout";
+import DownloadPDFButton from "./DownloadPDFButton";
 
 export default async function AssetDetailPage({ params }) {
   const user = await getCurrentUser();
@@ -14,19 +15,69 @@ export default async function AssetDetailPage({ params }) {
 
   await connectDB();
 
-  const asset = await Asset.findById(params.id).populate("owners.personId", "fullName");
+  const asset = await Asset.findById(params.id).lean();
 
   if (!asset) {
-    return <div>Asset not found</div>;
+    notFound();
   }
+
+  // Get user names for owners
+  const ownerIds = asset.owners?.map(o => o.personId).filter(Boolean) || [];
+  const users = await User.find({ _id: { $in: ownerIds } }).lean();
+  const userMap = Object.fromEntries(users.map(u => [u._id.toString(), u]));
+
+  // Serialize asset data
+  const assetData = {
+    _id: asset._id.toString(),
+    assetType: asset.assetType,
+    title: asset.title,
+    nickname: asset.nickname,
+    description: asset.description,
+    landUseType: asset.landUseType,
+    houseUsageType: asset.houseUsageType,
+    apartmentUsageType: asset.apartmentUsageType,
+    vehicleType: asset.vehicleType,
+    possessionStatus: asset.possessionStatus,
+    isPrimaryFamilyResidence: asset.isPrimaryFamilyResidence,
+    isIncomeGenerating: asset.isIncomeGenerating,
+    currentStatus: asset.currentStatus,
+    location: asset.location,
+    dimensions: asset.dimensions,
+    structure: asset.structure,
+    registration: asset.registration,
+    specs: asset.specs,
+    owners: asset.owners?.map(o => {
+      const userId = o.personId?.toString();
+      const user = userMap[userId];
+      return {
+        personName: user?.fullName || "Unknown",
+        percentage: o.percentage,
+        ownershipType: o.ownershipType,
+      };
+    }) || [],
+    acquisitionInfo: asset.acquisitionInfo,
+    mutationAndTitle: asset.mutationAndTitle,
+    occupancy: asset.occupancy,
+    rentalInfo: asset.rentalInfo,
+    valuation: asset.valuation,
+    compliance: asset.compliance,
+    possessionDetails: asset.possessionDetails,
+    maintenance: asset.maintenance,
+    controlInfo: asset.controlInfo,
+    history: asset.history || [],
+    flags: asset.flags,
+    notesInternal: asset.notesInternal,
+    tags: asset.tags || [],
+    createdAt: asset.createdAt,
+    updatedAt: asset.updatedAt,
+  };
 
   return (
     <DashboardLayout userName={user.fullName}>
-      <Link href="/assets" style={{ marginBottom: "1rem", display: "inline-block" }}>
-        ← Back to Assets
-      </Link>
-
-      <h1 style={{ marginBottom: "2rem" }}>{asset.title}</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+        <h1 style={{ margin: 0 }}>{assetData.title}</h1>
+        <DownloadPDFButton asset={assetData} />
+      </div>
 
       <div className="card">
         <h2>Basic Information</h2>

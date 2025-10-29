@@ -404,6 +404,47 @@ const AssetSchema = new mongoose.Schema(
     
     notesInternal: String,
     tags: [String],
+    documents: [{
+      label: {
+        type: String,
+        required: true
+      },
+      fileUrl: {
+        type: String,
+        required: true
+      },
+      docType: {
+        type: String,
+        enum: ["ownership", "mutation", "tax", "map", "legal", "photo", "other"],
+        default: "other"
+      },
+      fileType: String,
+      notes: String,
+      uploadedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    relatedContacts: [{
+      category: {
+        type: String,
+        enum: ["labor", "neighbor", "dealer", "conflict_person", "other"],
+        required: true
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      phoneNumber: {
+        type: String,
+        required: true
+      },
+      notes: String,
+      addedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
   },
   {
     timestamps: true,
