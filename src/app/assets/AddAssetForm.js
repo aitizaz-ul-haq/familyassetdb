@@ -108,6 +108,8 @@ export default function AddAssetForm() {
     tags: [],
   });
 
+  const [contacts, setContacts] = useState([]);
+
   useEffect(() => {
     if (showForm) {
       fetch("/api/people")
@@ -115,6 +117,27 @@ export default function AddAssetForm() {
         .then((data) => setPeople(data));
     }
   }, [showForm]);
+
+  const addContact = () => {
+    setContacts([...contacts, {
+      id: Date.now(),
+      category: "lawyer",
+      name: "",
+      phoneNumber: "",
+      email: "",
+      notes: ""
+    }]);
+  };
+
+  const removeContact = (id) => {
+    setContacts(contacts.filter(c => c.id !== id));
+  };
+
+  const updateContact = (id, field, value) => {
+    setContacts(contacts.map(c => 
+      c.id === id ? { ...c, [field]: value } : c
+    ));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,6 +158,13 @@ export default function AddAssetForm() {
             areaOrSector: formData.areaOrSector,
           },
           currentStatus: formData.currentStatus,
+          relatedContacts: contacts.filter(c => c.name && c.phoneNumber).map(c => ({
+            category: c.category,
+            name: c.name,
+            phoneNumber: c.phoneNumber,
+            email: c.email,
+            notes: c.notes
+          }))
         }),
       });
 
@@ -285,6 +315,128 @@ export default function AddAssetForm() {
       <h2>Add New Asset</h2>
       
       {renderAssetForm()}
+
+      {/* Related Contacts Section */}
+      <div className={`${styles.sectionHeader} ${styles.fullWidth}`}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h3>📞 Related Contacts (Optional)</h3>
+          <button
+            type="button"
+            onClick={addContact}
+            style={{
+              padding: "0.5rem 1rem",
+              background: "#7FC6A4",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontSize: "0.85rem"
+            }}
+          >
+            + Add Contact
+          </button>
+        </div>
+      </div>
+
+      {contacts.length > 0 && (
+        <div className={styles.fullWidth}>
+          {contacts.map((contact, idx) => (
+            <div key={contact.id} style={{
+              padding: "1rem",
+              background: "#f9f9f9",
+              borderRadius: "8px",
+              marginBottom: "1rem",
+              border: "1px solid #e0e0e0"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <strong style={{ color: "#6D7692" }}>Contact {idx + 1}</strong>
+                <button
+                  type="button"
+                  onClick={() => removeContact(contact.id)}
+                  style={{
+                    background: "#ef5350",
+                    color: "white",
+                    border: "none",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "0.85rem"
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}>
+                <div>
+                  <label className={styles.label}>Category *</label>
+                  <select
+                    value={contact.category}
+                    onChange={(e) => updateContact(contact.id, "category", e.target.value)}
+                    className={styles.select}
+                  >
+                    <option value="lawyer">👨‍⚖️ Lawyer</option>
+                    <option value="agent">🤵 Agent</option>
+                    <option value="caretaker">👷 Caretaker</option>
+                    <option value="tenant">🏠 Tenant</option>
+                    <option value="property_dealer">🏘️ Property Dealer</option>
+                    <option value="builder">🏗️ Builder</option>
+                    <option value="conflict_person">⚠️ Conflict Person</option>
+                    <option value="government_official">🏛️ Government Official</option>
+                    <option value="other">📋 Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className={styles.label}>Name *</label>
+                  <input
+                    type="text"
+                    value={contact.name}
+                    onChange={(e) => updateContact(contact.id, "name", e.target.value)}
+                    placeholder="Contact name"
+                    className={styles.input}
+                  />
+                </div>
+
+                <div>
+                  <label className={styles.label}>Phone Number *</label>
+                  <input
+                    type="tel"
+                    value={contact.phoneNumber}
+                    onChange={(e) => updateContact(contact.id, "phoneNumber", e.target.value)}
+                    placeholder="0300-1234567"
+                    className={styles.input}
+                  />
+                </div>
+
+                <div>
+                  <label className={styles.label}>Email</label>
+                  <input
+                    type="email"
+                    value={contact.email}
+                    onChange={(e) => updateContact(contact.id, "email", e.target.value)}
+                    placeholder="email@example.com"
+                    className={styles.input}
+                  />
+                </div>
+
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <label className={styles.label}>Notes</label>
+                  <textarea
+                    value={contact.notes}
+                    onChange={(e) => updateContact(contact.id, "notes", e.target.value)}
+                    placeholder="Additional information..."
+                    rows={2}
+                    className={styles.textarea}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ...existing buttons... */}
     </div>
   );
 }

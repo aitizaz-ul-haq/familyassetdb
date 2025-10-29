@@ -2,61 +2,45 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "../../../../../lib/auth";
 import { connectDB } from "../../../../../lib/db";
 import Asset from "../../../../../models/Asset";
+import mongoose from "mongoose";
 
 export async function POST(request) {
-  const user = await getCurrentUser();
-  
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // ONLY admin can delete documents
-  if (user.role !== "admin") {
-    return NextResponse.json({ 
-      error: "Forbidden - Only Admin can delete documents" 
-    }, { status: 403 });
-  }
-
   try {
-    const body = await request.json();
-    const { assetId, docIndex } = body;
+    const user = await getCurrentUser();
+    if (!user || user.role !== "admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    if (!assetId || docIndex === undefined) {
-      return NextResponse.json({ error: "Missing assetId or docIndex" }, { status: 400 });
+    const { assetId, docId } = await request.json();
+
+    if (!assetId || !docId) {
+      return NextResponse.json(
+        { error: "Missing assetId or docId" },
+        { status: 400 }
+      );
     }
 
     await connectDB();
 
-    // Find the asset first
-    const asset = await Asset.findById(assetId);
+    // Use $pull to remove the document without triggering validation
+    const result = await Asset.updateOne(
+      { _id: new mongoose.Types.ObjectId(assetId) },
+      { $pull: { documents: { _id: new mongoose.Types.ObjectId(docId) } } }
+    );
 
-    if (!asset) {
-      return NextResponse.json({ error: "Asset not found" }, { status: 404 });
+    if (result.modifiedCount === 0) {
+      return NextResponse.json(
+        { error: "Document not found or already deleted" },
+        { status: 404 }
+      );
     }
 
-    if (!asset.documents || asset.documents.length <= docIndex) {
-      return NextResponse.json({ error: "Document not found" }, { status: 404 });
-    }
-
-    // Remove the document at the specified index
-    const deletedDoc = asset.documents[docIndex];
-    asset.documents.splice(docIndex, 1);
-
-    // Save the asset
-    await asset.save();
-
-    console.log(`[ADMIN DELETE] User ${user.email} deleted document "${deletedDoc.label}" from asset: ${asset.title}`);
-    console.log(`Asset now has ${asset.documents.length} documents`);
-
-    return NextResponse.json({ 
-      success: true, 
-      assetId: asset._id.toString(),
-      assetTitle: asset.title,
-      deletedLabel: deletedDoc.label,
-      remainingCount: asset.documents.length
-    });
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error removing document:", error);
-    return NextResponse.json({ error: "Failed to remove document", details: error.message }, { status: 500 });
+    console.error("Delete document error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete document" },
+      { status: 500 }
+    );
   }
 }
