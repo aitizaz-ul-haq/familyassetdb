@@ -7,11 +7,11 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   try {
-    console.log("=== LOGIN API STARTED ===");
-    console.log("Environment check:");
-    console.log("- JWT_SECRET exists:", !!process.env.JWT_SECRET);
-    console.log("- MONGODB_URI exists:", !!process.env.MONGODB_URI);
-    console.log("- NODE_ENV:", process.env.NODE_ENV);
+    // console.log("=== LOGIN API STARTED ===");
+    // console.log("Environment check:");
+    // console.log("- JWT_SECRET exists:", !!process.env.JWT_SECRET);
+    // console.log("- MONGODB_URI exists:", !!process.env.MONGODB_URI);
+    // console.log("- NODE_ENV:", process.env.NODE_ENV);
 
     // Check if JWT_SECRET exists
     if (!process.env.JWT_SECRET) {
