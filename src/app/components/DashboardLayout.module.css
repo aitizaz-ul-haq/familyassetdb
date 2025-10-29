@@ -100,10 +100,13 @@
 }
 
 .sidebarTitle {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #2c3e50;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .closeSidebar {
@@ -249,6 +252,10 @@
     font-size: 0.95rem;
   }
 
+  .sidebarTitle {
+    font-size: 0.75rem;
+  }
+  
   .mainContent {
     padding: 0.75rem;
   }
@@ -277,6 +284,10 @@
     left: 0;
   }
 
+  .sidebarTitle {
+    font-size: 0.8rem;
+  }
+  
   .overlay {
     display: block;
   }
@@ -333,6 +344,10 @@
     min-height: 100vh;
     width: 100%; /* Ensure full width */
   }
+
+  .sidebarTitle {
+    font-size: 0.9rem;
+  }
 }
 
 /* Medium laptops (>= 1024px) */
@@ -344,6 +359,10 @@
   .mainContent {
     padding: 2.5rem;
     width: 100%; /* Remove max-width constraints */
+  }
+
+  .sidebarTitle {
+    font-size: 1rem;
   }
 }
 

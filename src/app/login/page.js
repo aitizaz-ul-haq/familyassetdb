@@ -67,16 +67,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="page-login login-text">
-      {/* Top-left heading and description */}
-      <div className="login-info">
-        <h1>Family Asset Data Base</h1>
-        <p>A collection of all mutually owned properties for management and memory</p>
-      </div>
-
-      {/* Centered auth form - transparent background */}
-      <div className="card auth-card">
-        <h2>Login</h2>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#f5f7fa", // Same as dashboard background
+      padding: "1rem"
+    }}>
+      <div style={{
+        background: "white",
+        padding: "2.5rem",
+        borderRadius: "12px",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+        width: "100%",
+        maxWidth: "400px"
+      }}>
+        <h1 style={{
+          textAlign: "center",
+          marginBottom: "0.5rem",
+          color: "#2c3e50",
+          fontSize: "1.4rem", // Reduced font size
+          whiteSpace: "nowrap"
+        }}>
+          🏢 Family Asset Registry
+        </h1>
+        <p style={{
+          textAlign: "center",
+          color: "#6D7692",
+          marginBottom: "2rem",
+          fontSize: "0.95rem"
+        }}>
+          Sign in to access your dashboard
+        </p>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
