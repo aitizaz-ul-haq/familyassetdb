@@ -68,7 +68,7 @@ export default async function DocumentsPage({ searchParams }) {
     <DashboardLayout userName={user.fullName}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
         <h1 style={{ margin: 0 }}>📎 Documents</h1>
-        <AttachDocumentButton />
+        <AttachDocumentButton userRole={user.role} />
       </div>
 
       <div className="card">
@@ -90,7 +90,7 @@ export default async function DocumentsPage({ searchParams }) {
           Results shown: {assetsData.length}
         </div>
 
-        <DocumentsTable assets={assetsData} initialSearch={searchQuery} />
+        <DocumentsTable assets={assetsData} initialSearch={searchQuery} userRole={user.role} />
       </div>
     </DashboardLayout>
   );

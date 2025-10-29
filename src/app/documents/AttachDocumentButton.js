@@ -3,8 +3,13 @@
 import { useState } from "react";
 import AttachDocumentModal from "./AttachDocumentModal";
 
-export default function AttachDocumentButton() {
+export default function AttachDocumentButton({ userRole }) {
   const [showModal, setShowModal] = useState(false);
+
+  // Only admin can attach documents
+  if (userRole !== "admin") {
+    return null;
+  }
 
   return (
     <>

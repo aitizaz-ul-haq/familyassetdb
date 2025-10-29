@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function DocumentsTable({ assets, initialSearch }) {
+export default function DocumentsTable({ assets, initialSearch, userRole }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [viewingAsset, setViewingAsset] = useState(null);
+  const [deletingDocId, setDeletingDocId] = useState(null);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -23,6 +24,39 @@ export default function DocumentsTable({ assets, initialSearch }) {
     setSearchTerm("");
     router.push('/documents');
     router.refresh();
+  };
+
+  const handleDeleteDocument = async (assetId, docIndex) => {
+    if (!confirm("Are you sure you want to delete this document?")) {
+      return;
+    }
+
+    setDeletingDocId(docIndex);
+
+    try {
+      const response = await fetch("/api/documents/remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assetId: assetId,
+          docIndex: docIndex
+        })
+      });
+
+      if (response.ok) {
+        alert("✅ Document deleted successfully!");
+        router.refresh();
+        setViewingAsset(null);
+      } else {
+        const result = await response.json();
+        alert("❌ Failed to delete: " + (result.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      alert("❌ Network error: " + error.message);
+    } finally {
+      setDeletingDocId(null);
+    }
   };
 
   return (
@@ -225,59 +259,104 @@ export default function DocumentsTable({ assets, initialSearch }) {
               📎 Documents ({viewingAsset.documentCount})
             </h3>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {viewingAsset.documents.map((doc, idx) => (
-                <div key={idx} style={{
-                  padding: "1rem",
-                  background: "#f9f9f9",
-                  borderRadius: "6px",
-                  border: "1px solid #ddd",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: "1rem"
-                }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <h4 style={{ margin: 0, fontSize: "0.95rem", color: "#333", marginBottom: "0.25rem" }}>
-                      {doc.label}
-                    </h4>
-                    {doc.docType && (
-                      <span style={{ 
-                        fontSize: "0.75rem", 
-                        color: "#666",
-                        background: "#e0e0e0",
-                        padding: "0.2rem 0.5rem",
-                        borderRadius: "3px"
-                      }}>
-                        {doc.docType}
-                      </span>
-                    )}
-                    {doc.uploadedAt && (
-                      <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.75rem", color: "#999" }}>
-                        Uploaded: {new Date(doc.uploadedAt).toLocaleDateString()}
-                      </p>
-                    )}
+            {viewingAsset.documents.length === 0 ? (
+              <p style={{ color: "#999", textAlign: "center", padding: "2rem" }}>
+                No documents attached yet.
+              </p>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {viewingAsset.documents.map((doc, idx) => (
+                  <div key={idx} style={{
+                    padding: "1rem",
+                    background: "#f9f9f9",
+                    borderRadius: "6px",
+                    border: "1px solid #ddd",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "1rem"
+                  }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h4 style={{ margin: 0, fontSize: "0.95rem", color: "#333", marginBottom: "0.25rem" }}>
+                        {doc.label}
+                      </h4>
+                      {doc.docType && (
+                        <span style={{ 
+                          fontSize: "0.75rem", 
+                          color: "#666",
+                          background: "#e0e0e0",
+                          padding: "0.2rem 0.5rem",
+                          borderRadius: "3px"
+                        }}>
+                          {doc.docType}
+                        </span>
+                      )}
+                      {doc.uploadedAt && (
+                        <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.75rem", color: "#999" }}>
+                          Uploaded: {new Date(doc.uploadedAt).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+                      <a
+                        href={doc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          padding: "0.5rem 1rem",
+                          background: "#2196F3",
+                          color: "white",
+                          borderRadius: "4px",
+                          textDecoration: "none",
+                          fontSize: "0.85rem",
+                          whiteSpace: "nowrap",
+                          fontWeight: "500"
+                        }}
+                      >
+                        ↗ Open
+                      </a>
+                      
+                      {/* ONLY ADMIN can delete */}
+                      {userRole === "admin" && (
+                        <button
+                          onClick={() => handleDeleteDocument(viewingAsset._id, idx)}
+                          disabled={deletingDocId === idx}
+                          style={{
+                            padding: "0.5rem 1rem",
+                            background: deletingDocId === idx ? "#ccc" : "#ef5350",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: deletingDocId === idx ? "not-allowed" : "pointer",
+                            fontSize: "0.85rem",
+                            whiteSpace: "nowrap",
+                            fontWeight: "500"
+                          }}
+                        >
+                          {deletingDocId === idx ? "Deleting..." : "🗑️ Delete"}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <a
-                    href={doc.fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      padding: "0.5rem 1rem",
-                      background: "#2196F3",
-                      color: "white",
-                      borderRadius: "4px",
-                      textDecoration: "none",
-                      fontSize: "0.85rem",
-                      whiteSpace: "nowrap",
-                      fontWeight: "500"
-                    }}
-                  >
-                    ↗ Open
-                  </a>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+
+            {/* Admin Notice */}
+            {userRole !== "admin" && viewingAsset.documents.length > 0 && (
+              <p style={{ 
+                marginTop: "1rem", 
+                padding: "0.75rem", 
+                background: "#fff3cd", 
+                borderRadius: "4px", 
+                fontSize: "0.85rem", 
+                color: "#856404",
+                textAlign: "center"
+              }}>
+                ℹ️ Only Admin can delete documents
+              </p>
+            )}
           </div>
         </div>
       )}
