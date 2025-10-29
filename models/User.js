@@ -18,13 +18,13 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["super_admin", "admin", "viewer"],
+      enum: ["admin", "viewer"],
       default: "viewer",
     },
-    relationToFamily: {
+    cnic: {
       type: String,
     },
-    cnic: {
+    relationToFamily: {
       type: String,
     },
     status: {
@@ -38,4 +38,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
+
+export default User;
