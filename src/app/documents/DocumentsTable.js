@@ -266,7 +266,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {viewingAsset.documents.map((doc, idx) => (
-                  <div key={idx} style={{
+                  <div key={doc._id || idx} style={{
                     padding: "1rem",
                     background: "#f9f9f9",
                     borderRadius: "6px",

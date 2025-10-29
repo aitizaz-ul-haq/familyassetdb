@@ -50,17 +50,19 @@ export default async function DocumentsPage({ searchParams }) {
   console.log(`Assets after filter: ${assetsWithDocs.length}`);
   console.log("=== END DEBUG ===");
 
-  // Serialize data
+  // Serialize data - convert ObjectId and Date to strings
   const assetsData = assetsWithDocs.map(asset => ({
     _id: asset._id.toString(),
     title: asset.title,
     documentCount: asset.documents?.length || 0,
     documents: (asset.documents || []).map(doc => ({
+      _id: doc._id?.toString() || null, // Convert ObjectId to string
       label: doc.label,
       fileUrl: doc.fileUrl,
       docType: doc.docType,
       fileType: doc.fileType,
-      uploadedAt: doc.uploadedAt,
+      notes: doc.notes,
+      uploadedAt: doc.uploadedAt ? doc.uploadedAt.toISOString() : null, // Convert Date to ISO string
     }))
   }));
 

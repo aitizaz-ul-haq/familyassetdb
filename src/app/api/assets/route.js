@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "../../../../lib/auth";
 import { connectDB } from "../../../../lib/db";
 import Asset from "../../../../models/Asset";
+import Person from "../../../../models/Person"; // ADD THIS - Required for populate
 
 export async function GET() {
   try {
@@ -15,28 +16,25 @@ export async function GET() {
 
     const assets = await Asset.find()
       .populate("owners.personId", "fullName")
-      .select("title assetType currentStatus location owners")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
-    const formatted = assets.map((asset) => ({
+    const assetsData = assets.map(asset => ({
       _id: asset._id.toString(),
       title: asset.title,
       assetType: asset.assetType,
       currentStatus: asset.currentStatus,
-      location: {
-        city: asset.location?.city,
-        areaOrSector: asset.location?.areaOrSector,
-      },
-      owners: asset.owners.map((owner) => ({
+      location: asset.location,
+      owners: asset.owners?.map(owner => ({
         personName: owner.personId?.fullName || "Unknown",
-        percentage: owner.percentage,
-      })),
+        percentage: owner.percentage
+      })) || []
     }));
 
-    return NextResponse.json(formatted);
+    return NextResponse.json(assetsData);
   } catch (error) {
     console.error("GET /api/assets error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch assets", details: error.message }, { status: 500 });
   }
 }
 

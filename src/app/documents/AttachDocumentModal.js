@@ -8,6 +8,7 @@ export default function AttachDocumentModal({ onClose }) {
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loadingAssets, setLoadingAssets] = useState(true);
   const [formData, setFormData] = useState({
     assetId: "",
     documentLabel: "",
@@ -18,15 +19,22 @@ export default function AttachDocumentModal({ onClose }) {
 
   // Fetch all assets
   useEffect(() => {
+    setLoadingAssets(true);
     fetch("/api/assets")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load assets");
+        return res.json();
+      })
       .then(data => {
         console.log("Fetched assets for dropdown:", data.length);
-        setAssets(data);
+        setAssets(Array.isArray(data) ? data : []);
+        setLoadingAssets(false);
       })
       .catch(err => {
         console.error("Error fetching assets:", err);
-        setError("Failed to load assets");
+        setError("Failed to load assets: " + err.message);
+        setAssets([]);
+        setLoadingAssets(false);
       });
   }, []);
 
@@ -119,22 +127,29 @@ export default function AttachDocumentModal({ onClose }) {
             {/* Select Asset */}
             <div>
               <label className="label">Select Asset *</label>
-              <select
-                value={formData.assetId}
-                onChange={(e) => setFormData({ ...formData, assetId: e.target.value })}
-                required
-                style={{ border: "1px solid #7FC6A4", width: "100%", padding: "0.75rem" }}
-              >
-                <option value="">-- Choose an asset --</option>
-                {assets.map(asset => (
-                  <option key={asset._id} value={asset._id}>
-                    {asset.title} ({asset.assetType?.replace(/_/g, " ")})
-                  </option>
-                ))}
-              </select>
-              <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.25rem" }}>
-                {assets.length} assets available
-              </p>
+              {loadingAssets ? (
+                <p style={{ color: "#666", fontSize: "0.9rem" }}>Loading assets...</p>
+              ) : (
+                <>
+                  <select
+                    value={formData.assetId}
+                    onChange={(e) => setFormData({ ...formData, assetId: e.target.value })}
+                    required
+                    disabled={assets.length === 0}
+                    style={{ border: "1px solid #7FC6A4", width: "100%", padding: "0.75rem" }}
+                  >
+                    <option value="">-- Choose an asset --</option>
+                    {assets.map(asset => (
+                      <option key={asset._id} value={asset._id}>
+                        {asset.title} ({asset.assetType?.replace(/_/g, " ")})
+                      </option>
+                    ))}
+                  </select>
+                  <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.25rem" }}>
+                    {assets.length === 0 ? "No assets found. Please create an asset first." : `${assets.length} assets available`}
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Document Label */}
