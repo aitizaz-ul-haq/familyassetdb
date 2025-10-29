@@ -5,27 +5,29 @@ import PlotAssetForm from "./PlotAssetForm";
 import HouseAssetForm from "./HouseAssetForm";
 import ApartmentAssetForm from "./ApartmentAssetForm";
 import VehicleAssetForm from "./VehicleAssetForm";
+import { useRouter } from "next/navigation";
+import styles from "./AddAssetForm.module.css";
 
 export default function AddAssetForm() {
+  const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [people, setPeople] = useState([]);
   const [activeSection, setActiveSection] = useState("basic");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const [formData, setFormData] = useState({
-    assetType: "land_plot",
     title: "",
-    nickname: "",
+    assetType: "land_plot",
     description: "",
-    landUseType: "residential",
-    zoningStatus: "",
-    possessionStatus: "in_our_possession",
+    country: "Pakistan",
+    city: "",
+    areaOrSector: "",
     currentStatus: "clean",
     location: {
-      country: "Pakistan",
-      city: "",
       tehsil: "",
       district: "",
       mouzaVillage: "",
-      areaOrSector: "",
       blockOrPhase: "",
       streetNumber: "",
       plotNumber: "",
@@ -105,9 +107,6 @@ export default function AddAssetForm() {
     notesInternal: "",
     tags: [],
   });
-  
-  const [loading, setLoading] = useState(false);
-  const [selectedAssetType, setSelectedAssetType] = useState(null);
 
   useEffect(() => {
     if (showForm) {
@@ -119,22 +118,37 @@ export default function AddAssetForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
 
     try {
       const response = await fetch("/api/assets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title: formData.title,
+          assetType: formData.assetType,
+          description: formData.description,
+          location: {
+            country: formData.country,
+            city: formData.city,
+            areaOrSector: formData.areaOrSector,
+          },
+          currentStatus: formData.currentStatus,
+        }),
       });
 
       if (response.ok) {
-        window.location.reload();
+        alert("✅ Asset added successfully!");
+        router.push("/assets");
+        router.refresh();
       } else {
-        alert("Failed to add asset");
+        const result = await response.json();
+        setError(result.error || "Failed to add asset");
       }
-    } catch (error) {
-      alert("Error adding asset");
+    } catch (err) {
+      console.error(err);
+      setError("Network error: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -180,7 +194,7 @@ export default function AddAssetForm() {
     );
   }
 
-  if (!selectedAssetType) {
+  if (!formData.assetType) {
     return (
       <div className="card" style={{ marginBottom: "2rem" }}>
         <h2>Select Asset Type</h2>
@@ -188,7 +202,7 @@ export default function AddAssetForm() {
         
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
           <button
-            onClick={() => setSelectedAssetType("land_plot")}
+            onClick={() => setFormData({ ...formData, assetType: "land_plot" })}
             style={{ 
               padding: "2rem 1rem",
               background: "#e3f2fd",
@@ -201,7 +215,7 @@ export default function AddAssetForm() {
           </button>
           
           <button
-            onClick={() => setSelectedAssetType("house")}
+            onClick={() => setFormData({ ...formData, assetType: "house" })}
             style={{ 
               padding: "2rem 1rem",
               background: "#f3e5f5",
@@ -214,7 +228,7 @@ export default function AddAssetForm() {
           </button>
           
           <button
-            onClick={() => setSelectedAssetType("apartment")}
+            onClick={() => setFormData({ ...formData, assetType: "apartment" })}
             style={{ 
               padding: "2rem 1rem",
               background: "#fff3e0",
@@ -227,7 +241,7 @@ export default function AddAssetForm() {
           </button>
           
           <button
-            onClick={() => setSelectedAssetType("vehicle")}
+            onClick={() => setFormData({ ...formData, assetType: "vehicle" })}
             style={{ 
               padding: "2rem 1rem",
               background: "#e8f5e9",
@@ -252,15 +266,15 @@ export default function AddAssetForm() {
   }
 
   const renderAssetForm = () => {
-    switch (selectedAssetType) {
+    switch (formData.assetType) {
       case "land_plot":
-        return <PlotAssetForm onCancel={() => setSelectedAssetType(null)} />;
+        return <PlotAssetForm onCancel={() => setFormData({ ...formData, assetType: null })} />;
       case "house":
-        return <HouseAssetForm onCancel={() => setSelectedAssetType(null)} />;
+        return <HouseAssetForm onCancel={() => setFormData({ ...formData, assetType: null })} />;
       case "apartment":
-        return <ApartmentAssetForm onCancel={() => setSelectedAssetType(null)} />;
+        return <ApartmentAssetForm onCancel={() => setFormData({ ...formData, assetType: null })} />;
       case "vehicle":
-        return <VehicleAssetForm onCancel={() => setSelectedAssetType(null)} />;
+        return <VehicleAssetForm onCancel={() => setFormData({ ...formData, assetType: null })} />;
       default:
         return null;
     }

@@ -1,0 +1,498 @@
+/* Dashboard Container */
+.dashboardContainer {
+  padding: 2rem 1rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.dashboardTitle {
+  margin: 0 0 2rem 0;
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Stats Cards Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.statCard.purple {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.statCard.pink {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.statCard.blue {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.statIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.statLabel {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+.chartRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.chartCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  min-height: 350px;
+}
+
+.chartTitle {
+  margin: 0 0 1.5rem 0;
+  color: #6D7692;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Bar Chart */
+.barChartContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.barItem {
+  width: 100%;
+}
+
+.barHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.barLabel {
+  font-weight: 500;
+  color: #333;
+}
+
+.barValue {
+  font-weight: 700;
+}
+
+.barTrack {
+  width: 100%;
+  height: 14px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.barFill {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+}
+
+/* Status List */
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.statusItem:hover {
+  transform: translateX(5px);
+}
+
+.statusBadge {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.statusInfo {
+  flex: 1;
+}
+
+.statusName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.statusPercentage {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Cities List */
+.citiesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cityItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+}
+
+.cityItem:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.cityRank {
+  font-size: 1.8rem;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.cityName {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.cityCount {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Donut Chart */
+.donutContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.donutChart {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.donutCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.donutNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4caf50;
+}
+
+.donutLabel {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.donutLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.legendColor {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.legendText {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.legendValue {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Owners List */
+.ownersList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ownerItem {
+  padding: 1.25rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  border-left: 5px solid;
+  transition: transform 0.2s ease;
+}
+
+.ownerItem:hover {
+  transform: translateX(5px);
+}
+
+.ownerHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.ownerName {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.ownerCount {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.ownerBarTrack {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ownerBarFill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Trend Chart */
+.trendChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  height: 280px;
+  padding: 1rem 0;
+}
+
+.trendBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  height: 100%;
+  min-width: 40px;
+}
+
+.trendBarFill {
+  width: 100%;
+  max-width: 70px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.75rem;
+  transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trendValue {
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.trendLabel {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: center;
+  font-weight: 500;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+}
+
+.emptyState p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 1rem 0.5rem;
+  }
+
+  .dashboardTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .statCard {
+    padding: 1.5rem;
+  }
+
+  .statIcon {
+    font-size: 2.5rem;
+  }
+
+  .statNumber {
+    font-size: 2rem;
+  }
+
+  .chartRow {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .chartCard {
+    padding: 1.5rem;
+    min-height: 300px;
+  }
+
+  .chartTitle {
+    font-size: 1.05rem;
+  }
+
+  .donutChart {
+    width: 180px;
+    height: 180px;
+  }
+
+  .donutNumber {
+    font-size: 2rem;
+  }
+
+  .trendChart {
+    height: 220px;
+    gap: 0.75rem;
+  }
+
+  .trendBarFill {
+    max-width: 50px;
+  }
+
+  .cityRank, .cityCount {
+    font-size: 1.4rem;
+  }
+
+  .ownerCount {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chartCard {
+    padding: 1rem;
+  }
+
+  .barHeader {
+    font-size: 0.85rem;
+  }
+
+  .statusBadge {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .trendChart {
+    gap: 0.5rem;
+  }
+
+  .trendBarFill {
+    max-width: 40px;
+  }
+
+  .trendValue {
+    font-size: 0.85rem;
+  }
+}

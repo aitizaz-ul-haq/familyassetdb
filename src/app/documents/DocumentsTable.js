@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Pagination from "../components/Pagination";
+
+const ITEMS_PER_PAGE = 6;
 
 export default function DocumentsTable({ assets, initialSearch, userRole }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [viewingAsset, setViewingAsset] = useState(null);
   const [deletingDocId, setDeletingDocId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -17,14 +21,21 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
     } else {
       router.push('/documents');
     }
-    router.refresh(); // Force refresh to re-fetch data
+    setCurrentPage(1);
+    router.refresh();
   };
 
   const clearSearch = () => {
     setSearchTerm("");
     router.push('/documents');
+    setCurrentPage(1);
     router.refresh();
   };
+
+  // Pagination
+  const totalPages = Math.ceil(assets.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedAssets = assets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handleDeleteDocument = async (assetId, docIndex) => {
     if (!confirm("Are you sure you want to delete this document?")) {
@@ -128,74 +139,82 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
 
       {/* Assets Table - 2 Columns: Asset Name | Action */}
       {assets.length > 0 ? (
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ background: "#f5f5f5" }}>
-                <th style={{ 
-                  padding: "0.75rem", 
-                  textAlign: "left", 
-                  border: "1px solid #ddd", 
-                  width: "70%",
-                  fontSize: "0.9rem",
-                  fontWeight: "600"
-                }}>
-                  Asset Name
-                </th>
-                <th style={{ 
-                  padding: "0.75rem", 
-                  textAlign: "center", 
-                  border: "1px solid #ddd", 
-                  width: "30%",
-                  fontSize: "0.9rem",
-                  fontWeight: "600"
-                }}>
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {assets.map((asset) => (
-                <tr key={asset._id} style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={{ 
+        <>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#f5f5f5" }}>
+                  <th style={{ 
                     padding: "0.75rem", 
-                    border: "1px solid #ddd",
-                    fontSize: "0.95rem"
+                    textAlign: "left", 
+                    border: "1px solid #ddd", 
+                    width: "70%",
+                    fontSize: "0.9rem",
+                    fontWeight: "600"
                   }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-                      <strong style={{ color: "#333" }}>{asset.title}</strong>
-                      <span style={{ fontSize: "0.8rem", color: "#666" }}>
-                        📎 {asset.documentCount} document{asset.documentCount !== 1 ? 's' : ''}
-                      </span>
-                    </div>
-                  </td>
-                  <td style={{ 
+                    Asset Name
+                  </th>
+                  <th style={{ 
                     padding: "0.75rem", 
-                    border: "1px solid #ddd",
-                    textAlign: "center"
+                    textAlign: "center", 
+                    border: "1px solid #ddd", 
+                    width: "30%",
+                    fontSize: "0.9rem",
+                    fontWeight: "600"
                   }}>
-                    <button
-                      onClick={() => setViewingAsset(asset)}
-                      style={{
-                        padding: "0.5rem 1rem",
-                        background: "#2196F3",
-                        color: "white",
-                        borderRadius: "4px",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "0.85rem",
-                        fontWeight: "500",
-                        whiteSpace: "nowrap"
-                      }}
-                    >
-                      👁️ View Docs
-                    </button>
-                  </td>
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {paginatedAssets.map((asset) => (
+                  <tr key={asset._id} style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={{ 
+                      padding: "0.75rem", 
+                      border: "1px solid #ddd",
+                      fontSize: "0.95rem"
+                    }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                        <strong style={{ color: "#333" }}>{asset.title}</strong>
+                        <span style={{ fontSize: "0.8rem", color: "#666" }}>
+                          📎 {asset.documentCount} document{asset.documentCount !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ 
+                      padding: "0.75rem", 
+                      border: "1px solid #ddd",
+                      textAlign: "center"
+                    }}>
+                      <button
+                        onClick={() => setViewingAsset(asset)}
+                        style={{
+                          padding: "0.5rem 1rem",
+                          background: "#2196F3",
+                          color: "white",
+                          borderRadius: "4px",
+                          border: "none",
+                          cursor: "pointer",
+                          fontSize: "0.85rem",
+                          fontWeight: "500",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        👁️ View Docs
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
       ) : (
         <div style={{ 
           padding: "3rem", 
