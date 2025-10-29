@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
-}
+  // Remove experimental.serverActions - it's now enabled by default
+};
 
-export default nextConfig
+export default nextConfig;
