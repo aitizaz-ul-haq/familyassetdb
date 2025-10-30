@@ -23,7 +23,6 @@ async function seedCompleteAssets() {
       process.exit(1);
     }
 
-
     // LAND PLOTS (5 complete)
     const landPlots = [
       {
