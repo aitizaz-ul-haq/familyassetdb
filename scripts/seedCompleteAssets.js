@@ -13,26 +13,18 @@ const UserSchema = new mongoose.Schema({}, { strict: false, timestamps: true });
 
 async function seedCompleteAssets() {
   try {
-    console.log("🔌 Connecting to MongoDB...");
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log("✅ Connected\n");
-
     const Asset = mongoose.models.Asset || mongoose.model("Asset", AssetSchema);
     const User = mongoose.models.User || mongoose.model("User", UserSchema);
-
-    console.log("👥 Fetching existing users...");
     const users = await User.find({});
     
     if (users.length === 0) {
-      console.log("❌ No users found! Please add users first.");
       await mongoose.disconnect();
       process.exit(1);
     }
 
-    console.log(`✅ Found ${users.length} users\n`);
 
     // LAND PLOTS (5 complete)
-    console.log("🏞️  Creating 5 Complete Land Plots...");
     const landPlots = [
       {
         assetType: "land_plot",
@@ -307,10 +299,8 @@ async function seedCompleteAssets() {
     for (const plot of landPlots) {
       await Asset.create(plot);
     }
-    console.log("✅ Created 5 land plots\n");
 
     // HOUSES (5 complete)
-    console.log("🏠 Creating 5 Complete Houses...");
     const houses = [
       {
         assetType: "house",
@@ -533,10 +523,8 @@ async function seedCompleteAssets() {
     for (const house of houses) {
       await Asset.create(house);
     }
-    console.log("✅ Created 5 houses\n");
 
     // APARTMENTS (5 complete)
-    console.log("🏢 Creating 5 Complete Apartments...");
     const apartments = [
       {
         assetType: "apartment",
@@ -727,10 +715,8 @@ async function seedCompleteAssets() {
     for (const apt of apartments) {
       await Asset.create(apt);
     }
-    console.log("✅ Created 5 apartments\n");
 
     // VEHICLES (5 complete)
-    console.log("🚗 Creating 5 Complete Vehicles...");
     const vehicles = [
       {
         assetType: "vehicle",
@@ -923,41 +909,18 @@ async function seedCompleteAssets() {
     for (const vehicle of vehicles) {
       await Asset.create(vehicle);
     }
-    console.log("✅ Created 5 vehicles\n");
 
     // Summary
     const totalAssets = await Asset.countDocuments();
-    console.log("━".repeat(60));
-    console.log("✅ SEEDING COMPLETE!");
-    console.log("━".repeat(60));
-    console.log(`Total assets in database: ${totalAssets}`);
-    console.log("\n📊 Assets created:");
-    console.log("  - 5 Land Plots (with complete data)");
-    console.log("  - 5 Houses (with complete data)");
-    console.log("  - 5 Apartments (with complete data)");
-    console.log("  - 5 Vehicles (with complete data)");
-    console.log("\n👥 Ownership distributed among:");
+
     users.forEach((user, i) => {
       console.log(`  ${i + 1}. ${user.fullName}`);
     });
-    console.log("\n✅ All assets have complete data including:");
-    console.log("  - Full location details");
-    console.log("  - Complete dimensions/structure/specs");
-    console.log("  - Acquisition information");
-    console.log("  - Valuation data");
-    console.log("  - Mutation & title details");
-    console.log("  - Compliance information");
-    console.log("  - Related contacts");
-    console.log("  - History timeline");
-    console.log("  - Tags and internal notes");
-    console.log("  - Proper flags");
-    console.log("\n🎉 Ready to view at /assets page!");
+   
 
     await mongoose.disconnect();
     process.exit(0);
   } catch (error) {
-    console.error("❌ Error:", error);
-    console.error("Stack:", error.stack);
     process.exit(1);
   }
 }
