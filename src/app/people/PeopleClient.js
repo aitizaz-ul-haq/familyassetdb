@@ -10,7 +10,7 @@ export default function PeopleClient({ people, userRole }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter people
-  const filteredPeople = people.filter(person => {
+  const filteredPeople = people.filter((person) => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
     return (
@@ -23,7 +23,10 @@ export default function PeopleClient({ people, userRole }) {
   // Pagination
   const totalPages = Math.ceil(filteredPeople.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedPeople = filteredPeople.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const paginatedPeople = filteredPeople.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -44,7 +47,7 @@ export default function PeopleClient({ people, userRole }) {
             padding: "0.75rem",
             border: "2px solid #7FC6A4",
             borderRadius: "6px",
-            fontSize: "0.95rem"
+            fontSize: "0.95rem",
           }}
         />
       </div>
@@ -61,16 +64,40 @@ export default function PeopleClient({ people, userRole }) {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: "#f5f5f5" }}>
-                  <th style={{ padding: "0.75rem", textAlign: "left", border: "1px solid #ddd" }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
                     Full Name
                   </th>
-                  <th style={{ padding: "0.75rem", textAlign: "left", border: "1px solid #ddd" }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
                     Relation
                   </th>
-                  <th style={{ padding: "0.75rem", textAlign: "left", border: "1px solid #ddd" }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
                     CNIC
                   </th>
-                  <th style={{ padding: "0.75rem", textAlign: "left", border: "1px solid #ddd" }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
                     Status
                   </th>
                 </tr>
@@ -78,17 +105,29 @@ export default function PeopleClient({ people, userRole }) {
               <tbody>
                 {paginatedPeople.map((person) => (
                   <tr key={person._id}>
-                    <td style={{ padding: "0.75rem", border: "1px solid #ddd" }}>
+                    <td
+                      style={{ padding: "0.75rem", border: "1px solid #ddd" }}
+                    >
                       {person.fullName}
                     </td>
-                    <td style={{ padding: "0.75rem", border: "1px solid #ddd" }}>
+                    <td
+                      style={{ padding: "0.75rem", border: "1px solid #ddd" }}
+                    >
                       {person.relationToFamily || "N/A"}
                     </td>
-                    <td style={{ padding: "0.75rem", border: "1px solid #ddd" }}>
+                    <td
+                      style={{ padding: "0.75rem", border: "1px solid #ddd" }}
+                    >
                       {person.cnic || "N/A"}
                     </td>
-                    <td style={{ padding: "0.75rem", border: "1px solid #ddd" }}>
-                      <span style={{ color: person.status === "alive" ? "green" : "gray" }}>
+                    <td
+                      style={{ padding: "0.75rem", border: "1px solid #ddd" }}
+                    >
+                      <span
+                        style={{
+                          color: person.status === "alive" ? "green" : "gray",
+                        }}
+                      >
                         {person.status}
                       </span>
                     </td>
