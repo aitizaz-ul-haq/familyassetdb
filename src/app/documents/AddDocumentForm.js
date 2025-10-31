@@ -18,7 +18,7 @@ export default function AddDocumentForm({ assets }) {
   });
   const [loading, setLoading] = useState(false);
 
-  const filteredAssets = assets.filter(asset => 
+  const filteredAssets = assets.filter((asset) =>
     asset.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -55,7 +55,10 @@ export default function AddDocumentForm({ assets }) {
 
   if (!showForm) {
     return (
-      <button onClick={() => setShowForm(true)} style={{ marginBottom: "1rem" }}>
+      <button
+        onClick={() => setShowForm(true)}
+        style={{ marginBottom: "1rem" }}
+      >
         + Add Document
       </button>
     );
@@ -67,7 +70,9 @@ export default function AddDocumentForm({ assets }) {
 
       {!selectedAsset ? (
         <div style={{ marginTop: "1rem" }}>
-          <h3 style={{ marginBottom: "1rem", fontSize: "1.1rem" }}>Step 1: Search & Select Asset</h3>
+          <h3 style={{ marginBottom: "1rem", fontSize: "1.1rem" }}>
+            Step 1: Search & Select Asset
+          </h3>
           <input
             type="text"
             placeholder="Search asset by title..."
@@ -75,10 +80,19 @@ export default function AddDocumentForm({ assets }) {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ marginBottom: "1rem" }}
           />
-          
-          <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ddd", borderRadius: "4px" }}>
+
+          <div
+            style={{
+              maxHeight: "300px",
+              overflowY: "auto",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+            }}
+          >
             {filteredAssets.length === 0 ? (
-              <div style={{ padding: "1rem", color: "#666" }}>No assets found</div>
+              <div style={{ padding: "1rem", color: "#666" }}>
+                No assets found
+              </div>
             ) : (
               filteredAssets.map((asset) => (
                 <div
@@ -90,8 +104,12 @@ export default function AddDocumentForm({ assets }) {
                     cursor: "pointer",
                     transition: "background 0.2s",
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = "#f5f5f5"}
-                  onMouseLeave={(e) => e.currentTarget.style.background = "white"}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "#f5f5f5")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "white")
+                  }
                 >
                   {asset.title}
                 </div>
@@ -102,56 +120,89 @@ export default function AddDocumentForm({ assets }) {
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            style={{ marginTop: "1rem", background: "#ef5350", width: "auto", padding: "0.5rem 1.5rem" }}
+            style={{
+              marginTop: "1rem",
+              background: "#ef5350",
+              width: "auto",
+              padding: "0.5rem 1.5rem",
+            }}
           >
             Cancel
           </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-          <div style={{ padding: "1rem", background: "#e8f5e9", borderRadius: "4px", marginBottom: "1.5rem" }}>
-            <div style={{ fontWeight: "600", marginBottom: "0.25rem" }}>Selected Asset:</div>
+          <div
+            style={{
+              padding: "1rem",
+              background: "#e8f5e9",
+              borderRadius: "4px",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div style={{ fontWeight: "600", marginBottom: "0.25rem" }}>
+              Selected Asset:
+            </div>
             <div>{selectedAsset.title}</div>
             <button
               type="button"
               onClick={() => setSelectedAsset(null)}
-              style={{ 
+              style={{
                 marginTop: "0.5rem",
                 background: "transparent",
                 color: "#7FC6A4",
                 border: "1px solid #7FC6A4",
                 padding: "0.25rem 0.75rem",
                 fontSize: "0.85rem",
-                width: "auto"
+                width: "auto",
               }}
             >
               Change Asset
             </button>
           </div>
 
-          <h3 style={{ marginBottom: "1rem", fontSize: "1.1rem" }}>Step 2: Add Document Details</h3>
+          <h3 style={{ marginBottom: "1rem", fontSize: "1.1rem" }}>
+            Step 2: Add Document Details
+          </h3>
 
           <div style={{ display: "grid", gap: "1rem" }}>
             <div>
               <label className="label">Document Label *</label>
               <input
                 value={formData.label}
-                onChange={(e) => setFormData({ ...formData, label: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, label: e.target.value })
+                }
                 required
                 placeholder="e.g., Registry Deed, Tax Receipt 2025, Site Photos"
               />
             </div>
 
-            <div style={{ padding: "1rem", background: "#e3f2fd", borderRadius: "4px" }}>
-              <h4 style={{ marginBottom: "0.5rem", fontSize: "1rem" }}>📤 How to Upload Files:</h4>
+            <div
+              style={{
+                padding: "1rem",
+                background: "#e3f2fd",
+                borderRadius: "4px",
+              }}
+            >
+              <h4 style={{ marginBottom: "0.5rem", fontSize: "1rem" }}>
+                📤 How to Upload Files:
+              </h4>
               <ol style={{ paddingLeft: "1.5rem", lineHeight: "1.8" }}>
                 <li>
                   <strong>For Images (JPG/PNG):</strong> Upload to{" "}
-                  <a href="https://imgbb.com" target="_blank" style={{ color: "#2196F3" }}>ImgBB.com</a>{" "}
+                  <a
+                    href="https://imgbb.com"
+                    target="_blank"
+                    style={{ color: "#2196F3" }}
+                  >
+                    ImgBB.com
+                  </a>{" "}
                   (free, no account needed)
                 </li>
                 <li>
-                  <strong>For PDFs:</strong> Upload to Google Drive, set sharing to "Anyone with link can view", copy link
+                  <strong>For PDFs:</strong> Upload to Google Drive, set sharing
+                  to "Anyone with link can view", copy link
                 </li>
                 <li>Paste the shareable link below</li>
               </ol>
@@ -162,18 +213,28 @@ export default function AddDocumentForm({ assets }) {
               <input
                 type="url"
                 value={formData.fileUrl}
-                onChange={(e) => setFormData({ ...formData, fileUrl: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, fileUrl: e.target.value })
+                }
                 required
                 placeholder="https://i.ibb.co/... or https://drive.google.com/..."
               />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <div>
                 <label className="label">Document Type</label>
                 <select
                   value={formData.docType}
-                  onChange={(e) => setFormData({ ...formData, docType: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, docType: e.target.value })
+                  }
                 >
                   <option value="ownership">Ownership</option>
                   <option value="mutation">Mutation</option>
@@ -188,7 +249,9 @@ export default function AddDocumentForm({ assets }) {
                 <label className="label">File Type</label>
                 <select
                   value={formData.fileType}
-                  onChange={(e) => setFormData({ ...formData, fileType: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fileType: e.target.value })
+                  }
                 >
                   <option value="pdf">PDF</option>
                   <option value="jpeg">JPEG</option>
@@ -200,12 +263,20 @@ export default function AddDocumentForm({ assets }) {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
               <div>
                 <label className="label">Issued By</label>
                 <input
                   value={formData.issuedBy}
-                  onChange={(e) => setFormData({ ...formData, issuedBy: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, issuedBy: e.target.value })
+                  }
                   placeholder="e.g., Islamabad Registrar Office"
                 />
               </div>
@@ -214,7 +285,9 @@ export default function AddDocumentForm({ assets }) {
                 <input
                   type="date"
                   value={formData.issueDate}
-                  onChange={(e) => setFormData({ ...formData, issueDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, issueDate: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -223,17 +296,23 @@ export default function AddDocumentForm({ assets }) {
               <label className="label">Notes</label>
               <textarea
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
                 rows="2"
                 placeholder="Any additional notes about this document"
               />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
               <input
                 type="checkbox"
                 checked={formData.isCritical}
-                onChange={(e) => setFormData({ ...formData, isCritical: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isCritical: e.target.checked })
+                }
                 style={{ width: "auto" }}
               />
               <label>Mark as Critical Document</label>
@@ -253,7 +332,11 @@ export default function AddDocumentForm({ assets }) {
                   setShowForm(false);
                   setSelectedAsset(null);
                 }}
-                style={{ width: "auto", padding: "0.5rem 1.5rem", background: "#ef5350" }}
+                style={{
+                  width: "auto",
+                  padding: "0.5rem 1.5rem",
+                  background: "#ef5350",
+                }}
               >
                 Cancel
               </button>
