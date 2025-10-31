@@ -39,7 +39,10 @@ export default function AddPersonForm() {
 
   if (!showForm) {
     return (
-      <button onClick={() => setShowForm(true)} style={{ marginBottom: "1rem" }}>
+      <button
+        onClick={() => setShowForm(true)}
+        style={{ marginBottom: "1rem" }}
+      >
         + Add Person
       </button>
     );
@@ -54,7 +57,9 @@ export default function AddPersonForm() {
             <label>Full Name *</label>
             <input
               value={formData.fullName}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, fullName: e.target.value })
+              }
               required
             />
           </div>
@@ -63,7 +68,9 @@ export default function AddPersonForm() {
             <label>Father's Name</label>
             <input
               value={formData.fatherName}
-              onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, fatherName: e.target.value })
+              }
             />
           </div>
 
@@ -71,7 +78,9 @@ export default function AddPersonForm() {
             <label>CNIC</label>
             <input
               value={formData.cnic}
-              onChange={(e) => setFormData({ ...formData, cnic: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, cnic: e.target.value })
+              }
               placeholder="12345-1234567-1"
             />
           </div>
@@ -80,7 +89,9 @@ export default function AddPersonForm() {
             <label>Relation to Family</label>
             <input
               value={formData.relationToFamily}
-              onChange={(e) => setFormData({ ...formData, relationToFamily: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, relationToFamily: e.target.value })
+              }
               placeholder="e.g., father, sister, uncle"
             />
           </div>
@@ -89,7 +100,9 @@ export default function AddPersonForm() {
             <label>Status</label>
             <select
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, status: e.target.value })
+              }
             >
               <option value="alive">Alive</option>
               <option value="deceased">Deceased</option>
@@ -100,7 +113,9 @@ export default function AddPersonForm() {
             <label>Notes</label>
             <textarea
               value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, notes: e.target.value })
+              }
               rows="3"
             />
           </div>
