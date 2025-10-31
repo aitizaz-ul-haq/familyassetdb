@@ -32,7 +32,7 @@ export default function DashboardLayout({ children, userName }) {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
-      
+
       if (response.redirected) {
         window.location.href = response.url;
       } else {
@@ -48,7 +48,7 @@ export default function DashboardLayout({ children, userName }) {
     <div className={styles.layoutContainer}>
       {/* Mobile Header */}
       <header className={styles.mobileHeader}>
-        <button 
+        <button
           className={styles.hamburger}
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
@@ -64,10 +64,14 @@ export default function DashboardLayout({ children, userName }) {
       </header>
 
       {/* Sidebar */}
-      <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.sidebarOpen : ''}`}>
+      <aside
+        className={`${styles.sidebar} ${
+          isMobileMenuOpen ? styles.sidebarOpen : ""
+        }`}
+      >
         <div className={styles.sidebarHeader}>
           <h2 className={styles.sidebarTitle}>Family Asset Registry</h2>
-          <button 
+          <button
             className={styles.closeSidebar}
             onClick={closeMobileMenu}
             aria-label="Close menu"
@@ -91,7 +95,9 @@ export default function DashboardLayout({ children, userName }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`${styles.navLink} ${isActive(item.href) ? styles.navLinkActive : ''}`}
+              className={`${styles.navLink} ${
+                isActive(item.href) ? styles.navLinkActive : ""
+              }`}
               onClick={closeMobileMenu}
             >
               <span className={styles.navIcon}>{item.icon}</span>
@@ -101,7 +107,7 @@ export default function DashboardLayout({ children, userName }) {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <button 
+          <button
             type="button"
             onClick={handleLogout}
             className={styles.logoutButton}
@@ -113,16 +119,11 @@ export default function DashboardLayout({ children, userName }) {
 
       {/* Overlay for mobile */}
       {isMobileMenuOpen && (
-        <div 
-          className={styles.overlay}
-          onClick={closeMobileMenu}
-        ></div>
+        <div className={styles.overlay} onClick={closeMobileMenu}></div>
       )}
 
       {/* Main Content */}
-      <main className={styles.mainContent}>
-        {children}
-      </main>
+      <main className={styles.mainContent}>{children}</main>
     </div>
   );
 }
