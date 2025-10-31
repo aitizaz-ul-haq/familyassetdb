@@ -11,7 +11,9 @@ export default function DocumentsList({ documents }) {
     <>
       <div className="card">
         {documents.length === 0 ? (
-          <p>No documents uploaded yet. Add documents to assets to see them here.</p>
+          <p>
+            No documents uploaded yet. Add documents to assets to see them here.
+          </p>
         ) : (
           <div className="table-responsive">
             <table className="table-sm table-nowrap">
@@ -30,18 +32,26 @@ export default function DocumentsList({ documents }) {
                 {documents.map((doc) => (
                   <tr key={doc._id}>
                     <td>
-                      {doc.isCritical && <span style={{ color: "#d32f2f", marginRight: "0.5rem" }}>⚠️</span>}
+                      {doc.isCritical && (
+                        <span
+                          style={{ color: "#d32f2f", marginRight: "0.5rem" }}
+                        >
+                          ⚠️
+                        </span>
+                      )}
                       {doc.label}
                     </td>
                     <td>{doc.docType}</td>
                     <td>
-                      <span style={{ 
-                        padding: "0.25rem 0.5rem",
-                        background: "#f5f5f5",
-                        borderRadius: "4px",
-                        fontSize: "0.8rem",
-                        textTransform: "uppercase"
-                      }}>
+                      <span
+                        style={{
+                          padding: "0.25rem 0.5rem",
+                          background: "#f5f5f5",
+                          borderRadius: "4px",
+                          fontSize: "0.8rem",
+                          textTransform: "uppercase",
+                        }}
+                      >
                         {doc.fileType}
                       </span>
                     </td>
@@ -56,7 +66,7 @@ export default function DocumentsList({ documents }) {
                       <div style={{ display: "flex", gap: "0.5rem" }}>
                         <button
                           onClick={() => setViewingDoc(doc)}
-                          style={{ 
+                          style={{
                             padding: "0.25rem 0.75rem",
                             background: "#7FC6A4",
                             color: "white",
@@ -68,18 +78,18 @@ export default function DocumentsList({ documents }) {
                         >
                           View
                         </button>
-                        <a 
-                          href={doc.fileUrl} 
-                          target="_blank" 
+                        <a
+                          href={doc.fileUrl}
+                          target="_blank"
                           rel="noopener noreferrer"
-                          style={{ 
+                          style={{
                             padding: "0.25rem 0.75rem",
                             background: "#2196F3",
                             color: "white",
                             borderRadius: "4px",
                             fontSize: "0.85rem",
                             textDecoration: "none",
-                            display: "inline-block"
+                            display: "inline-block",
                           }}
                         >
                           Original
