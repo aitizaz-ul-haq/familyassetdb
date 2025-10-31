@@ -19,7 +19,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
     if (trimmed) {
       router.push(`/documents?search=${encodeURIComponent(trimmed)}`);
     } else {
-      router.push('/documents');
+      router.push("/documents");
     }
     setCurrentPage(1);
     router.refresh();
@@ -27,11 +27,11 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
 
   const clearSearch = () => {
     setSearchTerm("");
-    router.push('/documents');
+    router.push("/documents");
     setCurrentPage(1);
     router.refresh();
   };
-
+i
   // Pagination
   const totalPages = Math.ceil(assets.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -50,8 +50,8 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assetId: assetId,
-          docIndex: docIndex
-        })
+          docIndex: docIndex,
+        }),
       });
 
       if (response.ok) {
@@ -74,7 +74,14 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
     <>
       {/* Search Bar */}
       <form onSubmit={handleSearch} style={{ marginBottom: "1.5rem" }}>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.75rem",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
           <input
             type="text"
             value={searchTerm}
@@ -100,7 +107,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
               cursor: "pointer",
               fontSize: "0.9rem",
               fontWeight: "500",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
             }}
           >
             🔍 Search
@@ -117,7 +124,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
                 borderRadius: "4px",
                 cursor: "pointer",
                 fontSize: "0.9rem",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
             >
               ✕ Clear
@@ -127,12 +134,27 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
       </form>
 
       {/* Results Info */}
-      <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
+      <div
+        style={{
+          marginBottom: "1rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.5rem",
+        }}
+      >
         <p style={{ margin: 0, color: "#666", fontSize: "0.9rem" }}>
           {initialSearch ? (
-            <>Showing {assets.length} asset{assets.length !== 1 ? 's' : ''} matching "<strong>{initialSearch}</strong>"</>
+            <>
+              Showing {assets.length} asset{assets.length !== 1 ? "s" : ""}{" "}
+              matching "<strong>{initialSearch}</strong>"
+            </>
           ) : (
-            <>Total: {assets.length} asset{assets.length !== 1 ? 's' : ''} with documents</>
+            <>
+              Total: {assets.length} asset{assets.length !== 1 ? "s" : ""} with
+              documents
+            </>
           )}
         </p>
       </div>
@@ -144,48 +166,66 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: "#f5f5f5" }}>
-                  <th style={{ 
-                    padding: "0.75rem", 
-                    textAlign: "left", 
-                    border: "1px solid #ddd", 
-                    width: "70%",
-                    fontSize: "0.9rem",
-                    fontWeight: "600"
-                  }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                      width: "70%",
+                      fontSize: "0.9rem",
+                      fontWeight: "600",
+                    }}
+                  >
                     Asset Name
                   </th>
-                  <th style={{ 
-                    padding: "0.75rem", 
-                    textAlign: "center", 
-                    border: "1px solid #ddd", 
-                    width: "30%",
-                    fontSize: "0.9rem",
-                    fontWeight: "600"
-                  }}>
+                  <th
+                    style={{
+                      padding: "0.75rem",
+                      textAlign: "center",
+                      border: "1px solid #ddd",
+                      width: "30%",
+                      fontSize: "0.9rem",
+                      fontWeight: "600",
+                    }}
+                  >
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedAssets.map((asset) => (
-                  <tr key={asset._id} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ 
-                      padding: "0.75rem", 
-                      border: "1px solid #ddd",
-                      fontSize: "0.95rem"
-                    }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                  <tr
+                    key={asset._id}
+                    style={{ borderBottom: "1px solid #eee" }}
+                  >
+                    <td
+                      style={{
+                        padding: "0.75rem",
+                        border: "1px solid #ddd",
+                        fontSize: "0.95rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.25rem",
+                        }}
+                      >
                         <strong style={{ color: "#333" }}>{asset.title}</strong>
                         <span style={{ fontSize: "0.8rem", color: "#666" }}>
-                          📎 {asset.documentCount} document{asset.documentCount !== 1 ? 's' : ''}
+                          📎 {asset.documentCount} document
+                          {asset.documentCount !== 1 ? "s" : ""}
                         </span>
                       </div>
                     </td>
-                    <td style={{ 
-                      padding: "0.75rem", 
-                      border: "1px solid #ddd",
-                      textAlign: "center"
-                    }}>
+                    <td
+                      style={{
+                        padding: "0.75rem",
+                        border: "1px solid #ddd",
+                        textAlign: "center",
+                      }}
+                    >
                       <button
                         onClick={() => setViewingAsset(asset)}
                         style={{
@@ -197,7 +237,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
                           cursor: "pointer",
                           fontSize: "0.85rem",
                           fontWeight: "500",
-                          whiteSpace: "nowrap"
+                          whiteSpace: "nowrap",
                         }}
                       >
                         👁️ View Docs
@@ -216,16 +256,20 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
           />
         </>
       ) : (
-        <div style={{ 
-          padding: "3rem", 
-          textAlign: "center", 
-          color: "#999",
-          background: "#f9f9f9",
-          borderRadius: "8px"
-        }}>
-          <p style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>📎 No Assets Found</p>
+        <div
+          style={{
+            padding: "3rem",
+            textAlign: "center",
+            color: "#999",
+            background: "#f9f9f9",
+            borderRadius: "8px",
+          }}
+        >
+          <p style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+            📎 No Assets Found
+          </p>
           <p style={{ fontSize: "0.9rem" }}>
-            {initialSearch 
+            {initialSearch
               ? `No assets with documents matching "${initialSearch}". Try a different search term.`
               : "Use the 'Attach Document to Asset' button above to add documents to assets."}
           </p>
@@ -234,30 +278,47 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
 
       {/* View Documents Modal */}
       {viewingAsset && (
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "rgba(0,0,0,0.9)",
-          zIndex: 10000,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "2rem"
-        }} onClick={() => setViewingAsset(null)}>
-          <div style={{
-            background: "white",
-            borderRadius: "8px",
-            maxWidth: "700px",
-            width: "100%",
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.9)",
+            zIndex: 10000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             padding: "2rem",
-            maxHeight: "90vh",
-            overflowY: "auto"
-          }} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", borderBottom: "2px solid #7FC6A4", paddingBottom: "1rem" }}>
-              <h2 style={{ margin: 0, color: "#6D7692" }}>{viewingAsset.title}</h2>
+          }}
+          onClick={() => setViewingAsset(null)}
+        >
+          <div
+            style={{
+              background: "white",
+              borderRadius: "8px",
+              maxWidth: "700px",
+              width: "100%",
+              padding: "2rem",
+              maxHeight: "90vh",
+              overflowY: "auto",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "1.5rem",
+                borderBottom: "2px solid #7FC6A4",
+                paddingBottom: "1rem",
+              }}
+            >
+              <h2 style={{ margin: 0, color: "#6D7692" }}>
+                {viewingAsset.title}
+              </h2>
               <button
                 onClick={() => setViewingAsset(null)}
                 style={{
@@ -267,57 +328,88 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
                   padding: "0.5rem 1rem",
                   borderRadius: "4px",
                   cursor: "pointer",
-                  fontSize: "0.9rem"
+                  fontSize: "0.9rem",
                 }}
               >
                 ✕ Close
               </button>
             </div>
 
-            <h3 style={{ color: "#666", fontSize: "1rem", marginBottom: "1rem" }}>
+            <h3
+              style={{ color: "#666", fontSize: "1rem", marginBottom: "1rem" }}
+            >
               📎 Documents ({viewingAsset.documentCount})
             </h3>
 
             {viewingAsset.documents.length === 0 ? (
-              <p style={{ color: "#999", textAlign: "center", padding: "2rem" }}>
+              <p
+                style={{ color: "#999", textAlign: "center", padding: "2rem" }}
+              >
                 No documents attached yet.
               </p>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                }}
+              >
                 {viewingAsset.documents.map((doc, idx) => (
-                  <div key={doc._id || idx} style={{
-                    padding: "1rem",
-                    background: "#f9f9f9",
-                    borderRadius: "6px",
-                    border: "1px solid #ddd",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: "1rem"
-                  }}>
+                  <div
+                    key={doc._id || idx}
+                    style={{
+                      padding: "1rem",
+                      background: "#f9f9f9",
+                      borderRadius: "6px",
+                      border: "1px solid #ddd",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                  >
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <h4 style={{ margin: 0, fontSize: "0.95rem", color: "#333", marginBottom: "0.25rem" }}>
+                      <h4
+                        style={{
+                          margin: 0,
+                          fontSize: "0.95rem",
+                          color: "#333",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
                         {doc.label}
                       </h4>
                       {doc.docType && (
-                        <span style={{ 
-                          fontSize: "0.75rem", 
-                          color: "#666",
-                          background: "#e0e0e0",
-                          padding: "0.2rem 0.5rem",
-                          borderRadius: "3px"
-                        }}>
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "#666",
+                            background: "#e0e0e0",
+                            padding: "0.2rem 0.5rem",
+                            borderRadius: "3px",
+                          }}
+                        >
                           {doc.docType}
                         </span>
                       )}
                       {doc.uploadedAt && (
-                        <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.75rem", color: "#999" }}>
-                          Uploaded: {new Date(doc.uploadedAt).toLocaleDateString()}
+                        <p
+                          style={{
+                            margin: "0.5rem 0 0 0",
+                            fontSize: "0.75rem",
+                            color: "#999",
+                          }}
+                        >
+                          Uploaded:{" "}
+                          {new Date(doc.uploadedAt).toLocaleDateString()}
                         </p>
                       )}
                     </div>
-                    
-                    <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+
+                    <div
+                      style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}
+                    >
                       <a
                         href={doc.fileUrl}
                         target="_blank"
@@ -330,27 +422,31 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
                           textDecoration: "none",
                           fontSize: "0.85rem",
                           whiteSpace: "nowrap",
-                          fontWeight: "500"
+                          fontWeight: "500",
                         }}
                       >
                         ↗ Open
                       </a>
-                      
+
                       {/* ONLY ADMIN can delete */}
                       {userRole === "admin" && (
                         <button
-                          onClick={() => handleDeleteDocument(viewingAsset._id, idx)}
+                          onClick={() =>
+                            handleDeleteDocument(viewingAsset._id, idx)
+                          }
                           disabled={deletingDocId === idx}
                           style={{
                             padding: "0.5rem 1rem",
-                            background: deletingDocId === idx ? "#ccc" : "#ef5350",
+                            background:
+                              deletingDocId === idx ? "#ccc" : "#ef5350",
                             color: "white",
                             border: "none",
                             borderRadius: "4px",
-                            cursor: deletingDocId === idx ? "not-allowed" : "pointer",
+                            cursor:
+                              deletingDocId === idx ? "not-allowed" : "pointer",
                             fontSize: "0.85rem",
                             whiteSpace: "nowrap",
-                            fontWeight: "500"
+                            fontWeight: "500",
                           }}
                         >
                           {deletingDocId === idx ? "Deleting..." : "🗑️ Delete"}
@@ -364,15 +460,17 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
 
             {/* Admin Notice */}
             {userRole !== "admin" && viewingAsset.documents.length > 0 && (
-              <p style={{ 
-                marginTop: "1rem", 
-                padding: "0.75rem", 
-                background: "#fff3cd", 
-                borderRadius: "4px", 
-                fontSize: "0.85rem", 
-                color: "#856404",
-                textAlign: "center"
-              }}>
+              <p
+                style={{
+                  marginTop: "1rem",
+                  padding: "0.75rem",
+                  background: "#fff3cd",
+                  borderRadius: "4px",
+                  fontSize: "0.85rem",
+                  color: "#856404",
+                  textAlign: "center",
+                }}
+              >
                 ℹ️ Only Admin can delete documents
               </p>
             )}
