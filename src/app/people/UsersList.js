@@ -46,17 +46,26 @@ export default function UsersList({ users, currentUserRole, currentUserId }) {
                   <td>{user.relationToFamily}</td>
                   <td>{user.cnic}</td>
                   <td>
-                    <span className={`badge ${user.status === "deceased" ? "badge-danger" : "badge-success"}`}>
+                    <span
+                      className={`badge ${
+                        user.status === "deceased"
+                          ? "badge-danger"
+                          : "badge-success"
+                      }`}
+                    >
                       {user.status}
                     </span>
                   </td>
                   <td>
-                    <span style={{ 
-                      padding: "0.25rem 0.5rem",
-                      background: user.role === "admin" ? "#e3f2fd" : "#f5f5f5",
-                      borderRadius: "4px",
-                      fontSize: "0.85rem"
-                    }}>
+                    <span
+                      style={{
+                        padding: "0.25rem 0.5rem",
+                        background:
+                          user.role === "admin" ? "#e3f2fd" : "#f5f5f5",
+                        borderRadius: "4px",
+                        fontSize: "0.85rem",
+                      }}
+                    >
                       {user.role}
                     </span>
                   </td>
@@ -65,17 +74,20 @@ export default function UsersList({ users, currentUserRole, currentUserId }) {
                       <div style={{ display: "flex", gap: "0.5rem" }}>
                         <button
                           onClick={() => setEditingUser(user)}
-                          style={{ padding: "0.25rem 0.75rem", fontSize: "0.85rem" }}
+                          style={{
+                            padding: "0.25rem 0.75rem",
+                            fontSize: "0.85rem",
+                          }}
                         >
                           Edit
                         </button>
                         {user._id !== currentUserId && (
                           <button
                             onClick={() => handleDelete(user._id)}
-                            style={{ 
-                              padding: "0.25rem 0.75rem", 
+                            style={{
+                              padding: "0.25rem 0.75rem",
                               fontSize: "0.85rem",
-                              background: "#ef5350"
+                              background: "#ef5350",
                             }}
                           >
                             Delete
