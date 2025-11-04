@@ -31,7 +31,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
     setCurrentPage(1);
     router.refresh();
   };
-i
+
   // Pagination
   const totalPages = Math.ceil(assets.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
