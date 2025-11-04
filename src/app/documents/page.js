@@ -70,7 +70,11 @@ export default async function DocumentsPage({ searchParams }) {
   }));
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout
+      userName={user.fullName}
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <div
         style={{
           display: "flex",

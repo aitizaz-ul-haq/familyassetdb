@@ -24,7 +24,11 @@ export default async function PeoplePage() {
   }));
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName} 
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <h1 style={{ marginBottom: "2rem" }}>People</h1>
 
       <UsersList users={usersData} currentUserRole={user.role} currentUserId={user._id} />

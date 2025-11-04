@@ -5,9 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./DashboardLayout.module.css";
 
-export default function DashboardLayout({ children, userName }) {
+export default function DashboardLayout({ children, userName = "User", userRole = "viewer", userCnic = "" }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  // Debug log
+  console.log("DashboardLayout props:", { userName, userRole, userCnic });
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: "📊" },
@@ -82,11 +85,16 @@ export default function DashboardLayout({ children, userName }) {
 
         <div className={styles.userInfo}>
           <div className={styles.userAvatar}>
-            {userName?.charAt(0).toUpperCase()}
+            {userName?.charAt(0).toUpperCase() || "U"}
           </div>
           <div className={styles.userDetails}>
-            <p className={styles.userName}>{userName}</p>
-            <p className={styles.userRole}>Admin</p>
+            <p className={styles.userName}>{userName || "User"}</p>
+            <p className={styles.userRole}>
+              {userRole === "admin" ? "👑 Administrator" : "👁️ Viewer"}
+            </p>
+            <p className={styles.userCnic}>
+              🆔 {userCnic || "No CNIC"}
+            </p>
           </div>
         </div>
 

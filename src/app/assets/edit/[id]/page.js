@@ -86,7 +86,11 @@ export default async function EditAssetPage({ params }) {
   }));
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName}
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <h1 style={{ marginBottom: "2rem" }}>✏️ Edit Asset</h1>
         <div className="card" style={{ padding: "2rem" }}>

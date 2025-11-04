@@ -11,6 +11,8 @@ export default async function DashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
+  console.log("Dashboard - Full user object:", JSON.stringify(user, null, 2)); // Debug log
+
   await connectDB();
 
   // Basic stats
@@ -131,7 +133,11 @@ export default async function DashboardPage() {
   };
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName} 
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <div className={styles.dashboardContainer}>
         <h1 className={styles.dashboardTitle}>📊 Dashboard</h1>
 

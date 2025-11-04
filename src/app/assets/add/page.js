@@ -16,7 +16,11 @@ export default async function AddAssetPage() {
   await connectDB();
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName}
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <div style={{ marginBottom: "2rem" }}>
         <h1 style={{ margin: "0 0 0.5rem 0", color: "#2c3e50" }}>➕ Add New Asset</h1>
         <p style={{ margin: 0, color: "#666", fontSize: "0.95rem" }}>

@@ -34,7 +34,11 @@ export default async function HistoryPage() {
   allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName}
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <h1 style={{ marginBottom: "2rem" }}>History</h1>
 
       <div className="card">

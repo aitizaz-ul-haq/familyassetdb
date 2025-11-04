@@ -271,7 +271,11 @@ export default async function AssetsPage() {
   });
 
   return (
-    <DashboardLayout userName={user.fullName}>
+    <DashboardLayout 
+      userName={user.fullName} 
+      userRole={user.role}
+      userCnic={user.cnic}
+    >
       <AssetsClient 
         assets={assetsData} 
         userRole={user.role}
