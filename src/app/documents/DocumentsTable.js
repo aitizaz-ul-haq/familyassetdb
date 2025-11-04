@@ -10,7 +10,7 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [viewingAsset, setViewingAsset] = useState(null);
-  const [deletingDocId, setDeletingDocId] = useState(null);
+  const [deletingDoc, setDeletingDoc] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearch = (e) => {
@@ -37,36 +37,32 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedAssets = assets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const handleDeleteDocument = async (assetId, docIndex) => {
-    if (!confirm("Are you sure you want to delete this document?")) {
+  const handleDeleteDocument = async (assetId, docId, docLabel) => {
+    if (!confirm(`Are you sure you want to delete "${docLabel}"?`)) {
       return;
     }
 
-    setDeletingDocId(docIndex);
+    setDeletingDoc(docId);
 
     try {
       const response = await fetch("/api/documents/remove", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          assetId: assetId,
-          docIndex: docIndex,
-        }),
+        body: JSON.stringify({ assetId, docId }),
       });
 
       if (response.ok) {
         alert("✅ Document deleted successfully!");
         router.refresh();
-        setViewingAsset(null);
       } else {
         const result = await response.json();
-        alert("❌ Failed to delete: " + (result.error || "Unknown error"));
+        alert(`❌ Error: ${result.error || "Failed to delete document"}`);
       }
     } catch (error) {
-      console.error("Error deleting document:", error);
-      alert("❌ Network error: " + error.message);
+      console.error("Delete error:", error);
+      alert("❌ Network error. Please try again.");
     } finally {
-      setDeletingDocId(null);
+      setDeletingDoc(null);
     }
   };
 
@@ -434,22 +430,22 @@ export default function DocumentsTable({ assets, initialSearch, userRole }) {
                           onClick={() =>
                             handleDeleteDocument(viewingAsset._id, idx)
                           }
-                          disabled={deletingDocId === idx}
+                          disabled={deletingDoc === idx}
                           style={{
                             padding: "0.5rem 1rem",
                             background:
-                              deletingDocId === idx ? "#ccc" : "#ef5350",
+                              deletingDoc === idx ? "#ccc" : "#ef5350",
                             color: "white",
                             border: "none",
                             borderRadius: "4px",
                             cursor:
-                              deletingDocId === idx ? "not-allowed" : "pointer",
+                              deletingDoc === idx ? "not-allowed" : "pointer",
                             fontSize: "0.85rem",
                             whiteSpace: "nowrap",
                             fontWeight: "500",
                           }}
                         >
-                          {deletingDocId === idx ? "Deleting..." : "🗑️ Delete"}
+                          {deletingDoc === idx ? "Deleting..." : "🗑️ Delete"}
                         </button>
                       )}
                     </div>
