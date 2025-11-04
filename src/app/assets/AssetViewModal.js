@@ -16,42 +16,373 @@ export default function AssetViewModal({ asset, onClose }) {
     return `PKR ${Number(amount).toLocaleString()}`;
   };
 
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    let y = 15;
+    const leftMargin = 15;
+    const pageWidth = 180;
+    const lineHeight = 6;
+
+    // Helper function to check if we need a new page
+    const checkNewPage = (requiredSpace = 10) => {
+      if (y + requiredSpace > 280) {
+        doc.addPage();
+        y = 15;
+      }
+    };
+
+    // Helper to add section header
+    const addSection = (title) => {
+      checkNewPage(15);
+      y += 3;
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text(title, leftMargin, y);
+      y += lineHeight;
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      y += 2;
+    };
+
+    // Helper to add field
+    const addField = (label, value) => {
+      if (!value || value === "N/A" || value === "" || value === "undefined") return;
+      checkNewPage(8);
+      
+      doc.setFont(undefined, 'bold');
+      doc.text(label + ":", leftMargin, y);
+      doc.setFont(undefined, 'normal');
+      
+      // Handle long text with wrapping
+      const valueStr = String(value);
+      const maxWidth = pageWidth - 60;
+      const lines = doc.splitTextToSize(valueStr, maxWidth);
+      
+      let xPos = leftMargin + 55;
+      lines.forEach((line, index) => {
+        if (index > 0) {
+          checkNewPage(8);
+          xPos = leftMargin + 55;
+        }
+        doc.text(line, xPos, y);
+        if (index < lines.length - 1) {
+          y += lineHeight;
+        }
+      });
+      y += lineHeight;
+    };
+
+    // ============ TITLE ============
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    const titleLines = doc.splitTextToSize(asset.title || "Asset Report", pageWidth);
+    titleLines.forEach(line => {
+      doc.text(line, leftMargin, y);
+      y += 8;
+    });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    y += 3;
+
+    // ============ BASIC INFORMATION ============
+    addSection("BASIC INFORMATION");
+    addField("Asset ID", asset._id);
+    addField("Asset Type", asset.assetType?.replace(/_/g, " ").toUpperCase());
+    addField("Nickname", asset.nickname);
+    addField("Description", asset.description);
+    addField("Current Status", asset.currentStatus?.replace(/_/g, " ").toUpperCase());
+    
+    if (asset.landUseType) addField("Land Use Type", asset.landUseType);
+    if (asset.houseUsageType) addField("House Usage Type", asset.houseUsageType);
+    if (asset.apartmentUsageType) addField("Apartment Usage Type", asset.apartmentUsageType);
+    if (asset.vehicleType) addField("Vehicle Type", asset.vehicleType);
+    if (asset.isPrimaryFamilyResidence !== undefined) addField("Primary Residence", asset.isPrimaryFamilyResidence ? "Yes" : "No");
+    if (asset.isIncomeGenerating !== undefined) addField("Income Generating", asset.isIncomeGenerating ? "Yes" : "No");
+
+    // ============ LOCATION ============
+    if (asset.location) {
+      addSection("LOCATION");
+      addField("Country", asset.location.country);
+      addField("Province", asset.location.province);
+      addField("City", asset.location.city);
+      addField("District", asset.location.district);
+      addField("Tehsil", asset.location.tehsil);
+      addField("Area/Sector", asset.location.areaOrSector);
+      addField("Society/Project", asset.location.societyOrProject);
+      addField("Block/Phase", asset.location.blockOrPhase);
+      addField("Street Number", asset.location.streetNumber);
+      addField("Plot Number", asset.location.plotNumber);
+      addField("House Number", asset.location.houseNumber);
+      addField("Apartment Number", asset.location.apartmentNumber);
+      addField("Floor Number", asset.location.floorNumber);
+      addField("Full Address", asset.location.fullAddress);
+      addField("Nearest Landmark", asset.location.nearestLandmark);
+      if (asset.location.geoCoordinates?.lat && asset.location.geoCoordinates?.lng) {
+        addField("GPS Coordinates", `${asset.location.geoCoordinates.lat}, ${asset.location.geoCoordinates.lng}`);
+      }
+    }
+
+    // ============ DIMENSIONS (for plots) ============
+    if (asset.dimensions) {
+      addSection("DIMENSIONS");
+      if (asset.dimensions.totalArea) {
+        addField("Total Area", `${asset.dimensions.totalArea.value} ${asset.dimensions.totalArea.unit}`);
+      }
+      addField("Area in Sq Ft", asset.dimensions.convertedAreaSqFt);
+      addField("Front Width", asset.dimensions.frontWidthFt ? `${asset.dimensions.frontWidthFt} ft` : null);
+      addField("Depth", asset.dimensions.depthFt ? `${asset.dimensions.depthFt} ft` : null);
+      if (asset.dimensions.isCornerPlot !== undefined) addField("Corner Plot", asset.dimensions.isCornerPlot ? "Yes" : "No");
+      if (asset.dimensions.isParkFacing !== undefined) addField("Park Facing", asset.dimensions.isParkFacing ? "Yes" : "No");
+      if (asset.dimensions.isMainRoadFacing !== undefined) addField("Main Road Facing", asset.dimensions.isMainRoadFacing ? "Yes" : "No");
+    }
+
+    // ============ STRUCTURE (for houses/apartments) ============
+    if (asset.structure) {
+      addSection("STRUCTURE DETAILS");
+      if (asset.structure.landArea) {
+        addField("Land Area", `${asset.structure.landArea.value} ${asset.structure.landArea.unit}`);
+      }
+      addField("Covered Area", asset.structure.coveredAreaSqFt ? `${asset.structure.coveredAreaSqFt} sq ft` : null);
+      addField("Number of Floors", asset.structure.floors);
+      addField("Total Rooms", asset.structure.rooms);
+      addField("Bedrooms", asset.structure.bedrooms);
+      addField("Bathrooms", asset.structure.bathrooms);
+      addField("Kitchens", asset.structure.kitchens);
+      addField("Drawing Rooms", asset.structure.drawingRooms);
+      addField("TV Lounges", asset.structure.tvLounges);
+      addField("Store Rooms", asset.structure.storeRooms);
+      if (asset.structure.servantQuarters !== undefined) addField("Servant Quarters", asset.structure.servantQuarters ? "Yes" : "No");
+      addField("Parking/Garage", asset.structure.garageOrParking);
+      addField("Construction Year", asset.structure.constructionYear);
+      addField("Condition", asset.structure.conditionSummary);
+    }
+
+    // ============ VEHICLE SPECIFICATIONS ============
+    if (asset.specs) {
+      addSection("VEHICLE SPECIFICATIONS");
+      addField("Make", asset.specs.make);
+      addField("Model", asset.specs.model);
+      addField("Model Year", asset.specs.modelYear);
+      addField("Color", asset.specs.color);
+      addField("Engine Capacity", asset.specs.engineCapacityCC ? `${asset.specs.engineCapacityCC} CC` : null);
+      addField("Fuel Type", asset.specs.fuelType);
+      addField("Transmission", asset.specs.transmission);
+      addField("Odometer Reading", asset.specs.odometerKm ? `${asset.specs.odometerKm} km` : null);
+      addField("Chassis Number", asset.specs.chassisNumber);
+      addField("Engine Number", asset.specs.engineNumber);
+    }
+
+    // ============ VEHICLE REGISTRATION ============
+    if (asset.registration) {
+      addSection("VEHICLE REGISTRATION");
+      addField("Registration Number", asset.registration.registrationNumber);
+      addField("Registration City", asset.registration.registrationCity);
+      addField("Registration Date", formatDate(asset.registration.registrationDate));
+      addField("Token Tax Paid Till", formatDate(asset.registration.tokenTaxPaidTill));
+      addField("Insurance Valid Till", formatDate(asset.registration.insuranceValidTill));
+      addField("Fitness Valid Till", formatDate(asset.registration.fitnessValidTill));
+    }
+
+    // ============ OWNERSHIP ============
+    if (asset.owners && asset.owners.length > 0) {
+      addSection("OWNERSHIP");
+      asset.owners.forEach((owner, idx) => {
+        checkNewPage(10);
+        doc.setFont(undefined, 'bold');
+        doc.text(`Owner ${idx + 1}:`, leftMargin, y);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${owner.personName} (${owner.percentage}%)`, leftMargin + 25, y);
+        y += lineHeight;
+        doc.text(`Type: ${owner.ownershipType || 'N/A'}`, leftMargin + 25, y);
+        y += lineHeight + 2;
+      });
+    }
+
+    // ============ ACQUISITION INFORMATION ============
+    if (asset.acquisitionInfo) {
+      addSection("ACQUISITION INFORMATION");
+      addField("Acquired Date", formatDate(asset.acquisitionInfo.acquiredDate));
+      addField("Acquisition Method", asset.acquisitionInfo.method);
+      addField("Acquired From", asset.acquisitionInfo.acquiredFrom);
+      addField("Purchase Price", formatCurrency(asset.acquisitionInfo.priceOrValueAtAcquisitionPKR));
+      addField("Acquisition Notes", asset.acquisitionInfo.notes);
+    }
+
+    // ============ VALUATION ============
+    if (asset.valuation) {
+      addSection("VALUATION");
+      addField("Estimated Market Value", formatCurrency(asset.valuation.estimatedMarketValuePKR));
+      addField("Valuation Date", formatDate(asset.valuation.estimatedDate));
+      addField("Valuation Source", asset.valuation.source);
+      addField("Forced Sale Value", formatCurrency(asset.valuation.forcedSaleValuePKR));
+      addField("Valuation Notes", asset.valuation.valuationNotes);
+    }
+
+    // ============ MUTATION & TITLE ============
+    if (asset.mutationAndTitle) {
+      addSection("MUTATION & TITLE");
+      addField("Registry Number", asset.mutationAndTitle.registryNumber);
+      addField("Registry Date", formatDate(asset.mutationAndTitle.registryDate));
+      addField("Mutation Number", asset.mutationAndTitle.mutationNumber);
+      addField("Mutation Date", formatDate(asset.mutationAndTitle.mutationDate));
+      addField("Fard Number", asset.mutationAndTitle.fardNumber);
+      addField("Khasra Number", asset.mutationAndTitle.khasraNumber);
+      addField("Property Tax Number", asset.mutationAndTitle.propertyTaxNumber);
+      if (asset.mutationAndTitle.isTitleClear !== undefined) {
+        addField("Title Clear", asset.mutationAndTitle.isTitleClear ? "Yes" : "No");
+      }
+      addField("Title Notes", asset.mutationAndTitle.titleNotes);
+    }
+
+    // ============ COMPLIANCE ============
+    if (asset.compliance) {
+      addSection("COMPLIANCE");
+      addField("Annual Property Tax", formatCurrency(asset.compliance.annualPropertyTaxPKR));
+      addField("Property Tax Paid Till", formatDate(asset.compliance.propertyTaxPaidTill));
+      addField("Electricity Bill Number", asset.compliance.electricityBillNumber);
+      addField("Gas Bill Number", asset.compliance.gasBillNumber);
+      addField("Water Bill Number", asset.compliance.waterBillNumber);
+      addField("Encroachment Risk", asset.compliance.encroachmentRisk);
+      addField("Govt Acquisition Risk", asset.compliance.govtAcquisitionRisk);
+    }
+
+    // ============ DISPUTE INFORMATION ============
+    if (asset.disputeInfo) {
+      addSection("DISPUTE INFORMATION");
+      addField("In Dispute", asset.disputeInfo.isInDispute ? "YES" : "NO");
+      if (asset.disputeInfo.isInDispute) {
+        addField("Dispute Type", asset.disputeInfo.type);
+        addField("Started Date", formatDate(asset.disputeInfo.startedDate));
+        addField("Details", asset.disputeInfo.details);
+        addField("Lawyer Name", asset.disputeInfo.lawyerName);
+        addField("Lawyer Phone", asset.disputeInfo.lawyerPhone);
+        addField("Case Number", asset.disputeInfo.caseNumber);
+        addField("Court Name", asset.disputeInfo.courtName);
+        addField("Next Hearing", formatDate(asset.disputeInfo.nextHearingDate));
+      }
+    }
+
+    // ============ RELATED CONTACTS ============
+    if (asset.relatedContacts && asset.relatedContacts.length > 0) {
+      addSection("RELATED CONTACTS");
+      asset.relatedContacts.forEach((contact, idx) => {
+        checkNewPage(20);
+        doc.setFont(undefined, 'bold');
+        doc.text(`Contact ${idx + 1}: ${contact.name}`, leftMargin, y);
+        y += lineHeight;
+        doc.setFont(undefined, 'normal');
+        doc.text(`Category: ${contact.category.replace(/_/g, " ")}`, leftMargin + 5, y);
+        y += lineHeight;
+        doc.text(`Phone: ${contact.phoneNumber}`, leftMargin + 5, y);
+        y += lineHeight;
+        if (contact.email) {
+          doc.text(`Email: ${contact.email}`, leftMargin + 5, y);
+          y += lineHeight;
+        }
+        if (contact.cnic) {
+          doc.text(`CNIC: ${contact.cnic}`, leftMargin + 5, y);
+          y += lineHeight;
+        }
+        if (contact.address) {
+          doc.text(`Address: ${contact.address}`, leftMargin + 5, y);
+          y += lineHeight;
+        }
+        if (contact.notes) {
+          const notesLines = doc.splitTextToSize(`Notes: ${contact.notes}`, pageWidth - 20);
+          notesLines.forEach(line => {
+            checkNewPage(8);
+            doc.text(line, leftMargin + 5, y);
+            y += lineHeight;
+          });
+        }
+        y += 3;
+      });
+    }
+
+    // ============ HISTORY ============
+    if (asset.history && asset.history.length > 0) {
+      addSection("HISTORY TIMELINE");
+      asset.history.forEach((entry, idx) => {
+        checkNewPage(15);
+        doc.setFont(undefined, 'bold');
+        doc.text(`${formatDate(entry.date)} - ${entry.action}`, leftMargin, y);
+        y += lineHeight;
+        doc.setFont(undefined, 'normal');
+        if (entry.details) {
+          const detailLines = doc.splitTextToSize(entry.details, pageWidth - 20);
+          detailLines.forEach(line => {
+            checkNewPage(8);
+            doc.text(line, leftMargin + 5, y);
+            y += lineHeight;
+          });
+        }
+        if (entry.actor) {
+          doc.text(`By: ${entry.actor}`, leftMargin + 5, y);
+          y += lineHeight;
+        }
+        y += 2;
+      });
+    }
+
+    // ============ TAGS ============
+    if (asset.tags && asset.tags.length > 0) {
+      addSection("TAGS");
+      const tagsText = asset.tags.join(", ");
+      const tagLines = doc.splitTextToSize(tagsText, pageWidth - 10);
+      tagLines.forEach(line => {
+        checkNewPage(8);
+        doc.text(line, leftMargin, y);
+        y += lineHeight;
+      });
+    }
+
+    // ============ INTERNAL NOTES ============
+    if (asset.notesInternal) {
+      addSection("INTERNAL NOTES");
+      const noteLines = doc.splitTextToSize(asset.notesInternal, pageWidth - 10);
+      noteLines.forEach(line => {
+        checkNewPage(8);
+        doc.text(line, leftMargin, y);
+        y += lineHeight;
+      });
+    }
+
+    // ============ FLAGS ============
+    if (asset.flags && (asset.flags.needsAttention || asset.flags.highValue || asset.flags.hasLegalIssues)) {
+      addSection("FLAGS");
+      if (asset.flags.needsAttention) {
+        doc.text("* Needs Attention", leftMargin, y);
+        y += lineHeight;
+      }
+      if (asset.flags.highValue) {
+        doc.text("* High Value Asset", leftMargin, y);
+        y += lineHeight;
+      }
+      if (asset.flags.hasLegalIssues) {
+        doc.text("* Has Legal Issues", leftMargin, y);
+        y += lineHeight;
+      }
+    }
+
+    // ============ FOOTER ============
+    checkNewPage(15);
+    y += 10;
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Report Generated: ${new Date().toLocaleString()}`, leftMargin, y);
+    y += 5;
+    doc.text(`Asset ID: ${asset._id}`, leftMargin, y);
+
+    // Save the PDF
+    const filename = `${asset.title.replace(/[^a-z0-9]/gi, '_').substring(0, 50)}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
+  };
+
   const getGoogleMapsUrl = () => {
     if (asset.location?.geoCoordinates?.lat && asset.location?.geoCoordinates?.lng) {
       return `https://www.google.com/maps?q=${asset.location.geoCoordinates.lat},${asset.location.geoCoordinates.lng}`;
     }
     return null;
-  };
-
-  const downloadPDF = () => {
-    const doc = new jsPDF();
-    let y = 20;
-    
-    doc.setFontSize(16);
-    doc.text(asset.title, 20, y);
-    y += 10;
-    
-    doc.setFontSize(10);
-    doc.text(`Type: ${asset.assetType}`, 20, y);
-    y += 7;
-    doc.text(`Status: ${asset.currentStatus}`, 20, y);
-    y += 7;
-    
-    if (asset.location?.city) {
-      doc.text(`Location: ${asset.location.city}`, 20, y);
-      y += 7;
-    }
-    
-    if (asset.owners && asset.owners.length > 0) {
-      doc.text("Owners:", 20, y);
-      y += 7;
-      asset.owners.forEach(owner => {
-        doc.text(`  - ${owner.personName} (${owner.percentage}%)`, 25, y);
-        y += 6;
-      });
-    }
-    
-    doc.save(`${asset.title}.pdf`);
   };
 
   const getEmbedUrl = (url, fileType) => {

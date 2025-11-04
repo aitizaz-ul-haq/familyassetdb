@@ -51,34 +51,33 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const user = await getCurrentUser();
-    
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    if (user.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!user || user.role !== "admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const body = await request.json();
-
     await connectDB();
 
-    // Update with ALL fields from the body
-    const updatedAsset = await Asset.findByIdAndUpdate(
-      params.id,
-      { $set: body }, // Accept all fields
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedAsset) {
+    const asset = await Asset.findById(params.id);
+    
+    if (!asset) {
       return NextResponse.json({ error: "Asset not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, asset: updatedAsset });
+    // Update all fields
+    Object.keys(body).forEach(key => {
+      asset[key] = body[key];
+    });
+
+    await asset.save();
+
+    return NextResponse.json({ success: true, asset });
   } catch (error) {
-    console.error("PUT /api/assets/[id] error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("Update asset error:", error);
+    return NextResponse.json(
+      { error: "Failed to update asset", details: error.message },
+      { status: 500 }
+    );
   }
 }
 

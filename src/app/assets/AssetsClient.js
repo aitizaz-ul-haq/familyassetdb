@@ -257,7 +257,7 @@ export default function AssetsClient({ assets, userRole }) {
                       Owners
                     </th>
                     <th style={{ padding: "0.75rem", textAlign: "center", border: "1px solid #ddd" }}>
-                      Action
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -289,20 +289,40 @@ export default function AssetsClient({ assets, userRole }) {
                           : <em style={{ color: "#999" }}>No owners specified</em>}
                       </td>
                       <td style={{ padding: "0.75rem", border: "1px solid #ddd", textAlign: "center" }}>
-                        <button
-                          onClick={() => setSelectedAsset(asset.fullData)}
-                          style={{
-                            padding: "0.5rem 1rem",
-                            background: "#2196F3",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "0.85rem"
-                          }}
-                        >
-                          View Details
-                        </button>
+                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+                          <button
+                            onClick={() => setSelectedAsset(asset.fullData)}
+                            style={{
+                              padding: "0.5rem 1rem",
+                              background: "#2196F3",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "0.85rem"
+                            }}
+                          >
+                            View
+                          </button>
+                          {userRole === "admin" && (
+                            <Link
+                              href={`/assets/edit/${asset._id}`}
+                              style={{
+                                padding: "0.5rem 1rem",
+                                background: "#FF9800",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontSize: "0.85rem",
+                                textDecoration: "none",
+                                display: "inline-block"
+                              }}
+                            >
+                              Edit
+                            </Link>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
